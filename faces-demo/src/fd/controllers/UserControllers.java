@@ -1,14 +1,14 @@
 package fd.controllers;
 
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
 
 import fd.models.User;
 import fd.services.UserServices;
 
 @ManagedBean
-@ApplicationScoped
+@RequestScoped
 public class UserControllers {
 
 	@ManagedProperty(value = "#{user}")

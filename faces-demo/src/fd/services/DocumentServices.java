@@ -55,7 +55,7 @@ public class DocumentServices {
 		return document;
 	}
 
-	public boolean deleteDocumentById(int id) throws Exception {
+	public boolean deleteDocumentByID(int id) throws Exception {
 		MySQLConnector connectionManager = new MySQLConnector();
 		connectionManager.connect();
 		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
