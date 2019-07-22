@@ -74,7 +74,7 @@ public class UserServices {
 		return user;
 	}
 
-	public String getUserNameById(int id) throws Exception {
+	public String getUsernameById(int id) throws Exception {
 		MySQLConnector connectionManager = new MySQLConnector();
 		connectionManager.connect();
 		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
