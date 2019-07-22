@@ -6,7 +6,7 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean
 @ApplicationScoped
 public class User {
-	private int id = 0;
+	private int id;
 	private String username;
 	private String password;
 	private boolean loggedIn = false;

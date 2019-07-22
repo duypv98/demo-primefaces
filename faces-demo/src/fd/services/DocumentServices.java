@@ -30,7 +30,7 @@ public class DocumentServices {
 			doc.setType(rs.getString("type"));
 			doc.setDateCreated(new Date(rs.getTimestamp("created_at").getTime()));
 			doc.setUserID(rs.getInt("user_id"));
-			doc.setFilePath(rs.getString("file_name"));
+			doc.setFilePath(rs.getString("file_path"));
 			documents.add(doc);
 		}
 		connectionManager.close();
@@ -51,7 +51,7 @@ public class DocumentServices {
 		document.setType(rs.getString("type"));
 		document.setDateCreated(new Date(rs.getTimestamp("created_at").getTime()));
 		document.setUserID(rs.getInt("user_id"));
-		document.setFilePath(rs.getString("file_name"));
+		document.setFilePath(rs.getString("file_path"));
 		return document;
 	}
 
@@ -62,17 +62,19 @@ public class DocumentServices {
 				ResultSet.CONCUR_UPDATABLE);
 		String sql = "UPDATE documents SET deleted_at = NOW() WHERE id = " + id + ";";
 		int rowEffected = st.executeUpdate(sql);
+		connectionManager.close();
 		return (rowEffected != 0);
 	}
 
-	public boolean uploadNewDocument(String name, String type, int userId, String fileName) throws Exception {
+	public boolean uploadNewDocument(String name, String type, int userId, String filePath) throws Exception {
 		MySQLConnector connectionManager = new MySQLConnector();
 		connectionManager.connect();
 		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				ResultSet.CONCUR_UPDATABLE);
-		String sql = "INSERT INTO documents (name, type, user_id, file_name) VALUES ('" + name + "','" + type + "',"
-				+ userId + ",' " + fileName + "');";
+		String sql = "INSERT INTO documents (name, type, user_id, file_path) VALUES ('" + name + "','" + type + "',"
+				+ userId + ",' " + filePath + "');";
 		int rowEffected = st.executeUpdate(sql);
+		connectionManager.close();
 		return (rowEffected != 0);
 	}
 }

@@ -1,14 +1,14 @@
 package fd.controllers;
 
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 
 import fd.models.User;
 import fd.services.UserServices;
 
 @ManagedBean
-@RequestScoped
+@ApplicationScoped
 public class UserControllers {
 
 	@ManagedProperty(value = "#{user}")
@@ -33,8 +33,11 @@ public class UserControllers {
 	}
 
 	public String login() throws Exception {
-		if (userServices.login(user.getUsername(), user.getPassword()) != null) {
+		User u = userServices.login(user.getUsername(), user.getPassword());
+		if (u != null) {
 			user.setLoggedIn(true);
+			user.setUsername(u.getUsername());
+			user.setId(u.getId());;
 			return "index" + "?faces-redirect=true";
 		} else {
 			return "login" + "?faces-redirect=true";
@@ -47,5 +50,10 @@ public class UserControllers {
 		user.setPassword(null);
 		user.setLoggedIn(false);
 		return "index" + "?faces-redirect=true";
+	}
+	
+	public String getUsernameById(int id) throws Exception {
+		String res = userServices.getUsernameById(id);
+		return res;
 	}
 }

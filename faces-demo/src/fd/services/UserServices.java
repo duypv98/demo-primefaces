@@ -56,7 +56,7 @@ public class UserServices {
 		MySQLConnector connectionManager = new MySQLConnector();
 		connectionManager.connect();
 		User user = new User();
-		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				ResultSet.CONCUR_READ_ONLY);
 		String sql = "SELECT * FROM users WHERE uname = '" + username + "';";
 		ResultSet rs = st.executeQuery(sql);
@@ -71,6 +71,7 @@ public class UserServices {
 				user = null;
 			}
 		}
+		connectionManager.close();
 		return user;
 	}
 
@@ -83,6 +84,7 @@ public class UserServices {
 		ResultSet rs = st.executeQuery(sql);
 		rs.first();
 		String username = rs.getString("uname");
+		connectionManager.close();
 		return username;
 	}
 }

@@ -43,7 +43,7 @@
 		</p:column>
 			<p:column style="width: 15%;">
 				<f:facet name="header">Author</f:facet>
-			#{userServices.getUsernameById(doc.userId)}
+			#{userControllers.getUsernameById(doc.userID)}
 		</p:column>
 			<p:column style="width: 12%;">
 				<f:facet name="header">Date Created</f:facet>
@@ -52,7 +52,8 @@
 			<p:column>
 				<f:facet name="header" colspan="3">Action</f:facet>
 				<p:commandButton update="documentList" value="View" icon="fa fa-eye"
-					action="#{documentControllers.documentView(doc.id)}">
+					action="#{documentControllers.documentView()}">
+					<f:param name="refDocumentID" value="#{doc.id}" />
 				</p:commandButton>
 				<p:commandButton update="documentList" value="Edit"
 					icon="fa fa-edit" rendered="#{documentControllers.userOp(doc)}" />

@@ -48,9 +48,6 @@
   	<param-name>primefaces.CLIENT_SIDE_VALIDATION</param-name>
   	<param-value>true</param-value>
   </context-param>
-  <listener>
-    <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
-  </listener>
   <session-config>
   	<session-timeout>60</session-timeout>
   </session-config>

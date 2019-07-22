@@ -2,9 +2,9 @@ package fd.controllers;
 
 import java.util.List;
 
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
@@ -14,7 +14,7 @@ import fd.models.User;
 import fd.services.DocumentServices;
 
 @ManagedBean
-@RequestScoped
+@ApplicationScoped
 public class DocumentControllers {
 	@ManagedProperty(value = "#{user}")
 	User user;
