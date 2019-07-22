@@ -2,7 +2,7 @@
     <wb-module deploy-name="faces-demo-0.0.1-SNAPSHOT">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <wb-resource deploy-path="/" source-path="/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <property name="context-root" value="faces-demo"/>
         <property name="java-output-path" value="/faces-demo/build/classes"/>
     </wb-module>

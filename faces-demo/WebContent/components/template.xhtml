@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><ui:insert name="title">Default title</ui:insert></title>
+	<h:outputStylesheet library="css" name="style.css"></h:outputStylesheet>
+</h:head>
+
+<h:body>
+	<ui:insert name="header">
+		<ui:include src="commons/header.xhtml" />
+	</ui:insert>
+
+	<ui:insert name="menu">
+		<ui:include src="commons/nav-menu.xhtml" />
+	</ui:insert>
+	
+	<ui:insert name="content">
+		<div id="content">Default Content</div>
+	</ui:insert>
+	
+	<ui:insert name="footer">
+		<ui:include src="commons/footer.xhtml" />
+	</ui:insert>
+
+</h:body>
+
+</html>

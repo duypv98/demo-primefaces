@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+	<div id="header">
+		<h:graphicImage library="img" name="logo.png" styleClass="logo" />
+		<div id="logo-des">DMS - Demo project</div>
+		<h:form id="logout-button">
+			<p:commandButton value="Logout" icon="fa fa-sign-out"
+				rendered="#{user.loggedIn}" action="#{userControllers.logout()}" />
+			<h:outputText
+				value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+				rendered="#{!user.loggedIn}" />
+		</h:form>
+	</div>
+
+</ui:composition>
+</html>
