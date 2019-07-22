@@ -14,7 +14,8 @@
 					<p:menuitem value="Search" icon="fa fa-search" />
 				</p:submenu>
 				<p:submenu label="User">
-					<p:menuitem value="Infomation" icon="fa fa-user" />
+					<p:menuitem value="Infomation" icon="fa fa-user"
+						onclick="PF('infoDlg').show();" />
 				</p:submenu>
 			</p:menu>
 		</h:form>
@@ -26,7 +27,12 @@
 			<h:outputText value="#{user.username}" />
 			<hr />
 		</h:panelGroup>
-
+		<p:dialog header="User's Info" widgetVar="infoDlg"
+			showEffect="explode" hideEffect="fade" height="350" resizable="false">
+			<ui:insert name="info">
+				<ui:include src="/components/application/info.xhtml" />
+			</ui:insert>
+		</p:dialog>
 	</div>
 </ui:composition>
 </html>

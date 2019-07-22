@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+	<h:form rendered="#{user.loggedIn}">
+		<h:panelGrid columns="2" cellpadding="10">
+			<p:graphicImage library="img" name="logo.png" />
+			<div>
+				<h:outputText value="ID: #{user.id}" />
+				<br />
+				<h:outputText value="Username: #{user.username}" />
+			</div>
+		</h:panelGrid>
+	</h:form>
+	<h:outputText value="Please login first .... (index.xhtml)"
+		rendered="#{!user.loggedIn}"></h:outputText>
+</ui:composition>
+</html>
