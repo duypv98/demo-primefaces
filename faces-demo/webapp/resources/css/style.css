@@ -1,0 +1,98 @@
+/*General*/
+html {
+	font-family: Verdana, sans-serif;
+	color: white;
+}
+
+body {
+	background: url("#{resource['img/bgr.jpg']}");
+	font-size: 80%;
+}
+/*Layout*/
+#header {
+	position: fixed;
+	vertical-align: top;
+	background-color: hsla(258, 100%, 34%, 0.7);
+	height: 4em;
+	width: 100%;
+	z-index: 100;
+	left: 0;
+	top: 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+#content {
+	top: 4em;
+	position: relative;
+	margin-left: 165px;
+	padding: 5px;
+	margin-bottom: 4em;
+	height:
+}
+
+#left {
+	position: fixed;
+	left: 4px;
+	top: 4em;
+	width: 145px;
+	background-color: hsla(258, 100%, 5%, 0.7);
+	padding-left: 1.5em;
+	height: 100%;
+	margin: 0;
+}
+
+#left #menu-bar {
+	margin-left: -24px;
+}
+
+#left .ui-menu {
+	width: 155px;
+}
+
+#footer {
+	position: fixed;
+	width: 100%;
+	margin-left: 165px;
+	padding: 5px;
+	bottom: 0;
+	background-color: hsla(0, 100%, 0%, 0.7);
+	height: 3em;
+	display: flex;
+	flex-direction: row;
+	align-content: center;
+	justify-content: center;
+}
+/*Header-Content*/
+.logo {
+	width: 4em;
+	height: 4em;
+	align-self: flex-start;
+}
+
+#logo-des {
+	margin-left: 165px;
+	font-size: xx-large;
+	font-weight: bolder;
+	font-size-adjust: inherit;
+	max-width: 50%;
+	align-self: center;
+}
+/*Footer-Content*/
+#copy-right, #contact, #bot-logo {
+	align-self: center;
+	margin: auto;
+}
+
+.bot-logo {
+	width: 3em;
+	height: 3em;
+}
+
+.alert-text {
+	font-size: medium;
+	color: red; !important;
+	font-weight: bold;
+}
