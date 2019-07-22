@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+	<h:form id="login-form">
+		<p:panel header="Create new account">
+			<p:messages />
+
+			<h:panelGrid columns="3" cellpadding="4">
+				<p:outputLabel for="@next" value="USERNAME:"
+					style="font-weight:bold" />
+				<p:inputText id="username" value="#{user.username}" label="USERNAME"
+					required="true" />
+				<p:message for="@previous" />
+
+				<p:outputLabel for="@next" value="PASSWORD:"
+					style="font-weight:bold" />
+				<p:password id="password" value="#{user.password}" label="PASSWORD"
+					required="true" />
+				<p:message for="@previous" />
+
+				<p:outputLabel for="@next" value="CONFIRM PASSWORD:"
+					style="font-weight:bold" />
+				<p:password id="con-password" value="#{user.password}"
+					label="CONFIRM PASSWORD" required="true" />
+				<p:message for="@previous" />
+			</h:panelGrid>
+			<f:facet name="footer">
+				<p:commandButton value="Register Now!" ajax="false"
+					icon="fa fa-windows" validateClient="true"
+					action="#{userControllers.register()}" />
+				<span> <p:link outcome="login" value="Back to Login page" />
+				</span>
+			</f:facet>
+		</p:panel>
+	</h:form>
+</ui:composition>
+</html>

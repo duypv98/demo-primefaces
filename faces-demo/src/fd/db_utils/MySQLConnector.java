@@ -11,7 +11,7 @@ public class MySQLConnector {
 	public static String USERNAME = "root";
 	public static String PASSWORD = "admin1";
 	
-	Connection connection = null;
+	public Connection connection = null;
 
 	public MySQLConnector() throws Exception {
 		try {
