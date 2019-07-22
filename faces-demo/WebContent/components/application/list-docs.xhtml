@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<h2>All Documents</h2>
+	<h:panelGroup layout="block"
+		style="display: inline-block; display: flex; flex-direction: row-reverse;"
+		rendered="#{user.loggedIn}">
+		<h:form>
+			<p:commandButton value="Upload" icon="fa fa-upload"
+				onclick="PF('uploadDlg').show();" />
+		</h:form>
+	</h:panelGroup>
+	<h:form>
+		<h:panelGroup layout="block" rendered="#{!user.loggedIn}">
+			<h:outputText styleClass="alert-text"
+				value="Login to manage your document " />
+			<br />
+			<p:commandLink value="Login here"
+				action="#{navigator.login()}"
+				style="color: green;" />
+		</h:panelGroup>
+	</h:form>
+	<h:form>
+		<p:dataTable id="documentList"
+			value="#{documentControllers.getAllDocuments()}" var="doc" border="2">
+			<p:column style="width: 5%;">
+				<f:facet name="header">ID</f:facet>
+			#{doc.id}
+		</p:column>
+			<p:column>
+				<f:facet name="header">Name</f:facet>
+			#{doc.name}
+		</p:column>
+			<p:column style="width: 15%;">
+				<f:facet name="header">Type</f:facet>
+			#{doc.type}
+		</p:column>
+			<p:column style="width: 15%;">
+				<f:facet name="header">Author</f:facet>
+			#{userServices.getUsernameById(doc.userId)}
+		</p:column>
+			<p:column style="width: 12%;">
+				<f:facet name="header">Date Created</f:facet>
+			#{doc.dateCreated}
+		</p:column>
+			<p:column>
+				<f:facet name="header" colspan="3">Action</f:facet>
+				<p:commandButton update="documentList" value="View" icon="fa fa-eye"
+					action="#{documentControllers.documentView(doc.id)}">
+				</p:commandButton>
+				<p:commandButton update="documentList" value="Edit"
+					icon="fa fa-edit" rendered="#{documentControllers.userOp(doc)}" />
+				<p:commandButton update="documentList" value="Delete"
+					icon="fa fa-close" rendered="#{documentControllers.userOp(doc)}"
+					action="#{documentControllers.documentRemove(doc.id)}">
+					<p:confirm header="Confirm delete" message="Are you sure ?"
+						icon="fa fa-warning" />
+				</p:commandButton>
+
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					closeOnEscape="true">
+					<p:commandButton value="Yes" type="button"
+						styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="fa fa-times" />
+				</p:confirmDialog>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+	<!-- Dialog -->
+
+	<p:dialog showEffect="fade" hideEffect="fade"
+		header="Uploading new file..." widgetVar="uploadDlg"
+		fitViewport="true" resizable="false">
+	</p:dialog>
+</ui:composition>
+</html>
