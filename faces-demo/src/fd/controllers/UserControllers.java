@@ -10,13 +10,12 @@ import fd.services.UserServices;
 @ManagedBean
 @RequestScoped
 public class UserControllers {
-	
-	static UserServices userServices = new UserServices();
-	
+
 	@ManagedProperty(value = "#{user}")
 	User user;
-	
-	
+
+	static UserServices userServices = new UserServices();
+
 	public User getUser() {
 		return user;
 	}
@@ -32,7 +31,7 @@ public class UserControllers {
 			return "register" + "?faces-redirect=true";
 		}
 	}
-	
+
 	public String login() throws Exception {
 		if (userServices.login(user.getUsername(), user.getPassword()) != null) {
 			user.setLoggedIn(true);
@@ -41,7 +40,7 @@ public class UserControllers {
 			return "login" + "?faces-redirect=true";
 		}
 	}
-	
+
 	public String logout() {
 		user.setId(0);
 		user.setUsername(null);
