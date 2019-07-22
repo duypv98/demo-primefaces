@@ -8,5 +8,10 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition template="components/template.xhtml">
 	<ui:define name="title">Home | Faces-DMS</ui:define>
+	<ui:define name="content">
+		<ui:insert name="list-docs">
+			<ui:include src="/components/application/list-docs.xhtml" />
+		</ui:insert>
+	</ui:define>
 </ui:composition>
 </html>
