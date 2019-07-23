@@ -85,7 +85,11 @@ public class DocumentControllers {
 
 	public void upload(FileUploadEvent event) {
 		document.setType(documentType);
-		document.setFileName(event.getFile().getFileName().trim());
+		String altName = document.getName();
+		String fileName = event.getFile().getFileName().trim();
+		if (altName == "")
+			document.setName(fileName);
+		document.setFileName(fileName);
 		FacesMessage msg = new FacesMessage("Success !", event.getFile().getFileName() + " is uploaded.");
 		FacesContext.getCurrentInstance().addMessage("messages", msg);
 		try {
@@ -117,9 +121,6 @@ public class DocumentControllers {
 	}
 
 	public String submitUpload() throws Exception {
-		if (document.getName() == null) {
-			document.setName(document.getFileName().substring(0, document.getFileName().lastIndexOf(".")));
-		}
 		documentServices.uploadNewDocument(document.getName(), document.getType(), user.getId(),
 				document.getFileName());
 		return "index" + "?faces-redirect=true";

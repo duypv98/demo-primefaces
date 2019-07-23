@@ -10,7 +10,7 @@
 		<h:panelGrid columns="2" cellpadding="5">
 			<p:outputLabel for="@next" value="Alt Name Document:" />
 			<p:inputText id="docName" value="#{document.name}"
-				label="Document's Name" />
+				label="Document's Name"/>
 
 			<p:outputLabel for="@next" value="Type" />
 			<p:selectOneMenu id="docType" effect="fold" editable="true"
@@ -19,10 +19,12 @@
 			</p:selectOneMenu>
 		</h:panelGrid>
 		<p:fileUpload fileUploadListener="#{documentControllers.upload}"
-			mode="advanced" auto="true"
-			oncomplete="alert('Your file is ready !');" />
+			mode="advanced" auto="true" allowTypes="/(\.|\/)(pdf)$/"
+			update="messages" />
+		<p:growl id="messages" showDetail="true" sticky="true" />
 		<p:commandButton value="Submit"
-			action="#{documentControllers.submitUpload()}" />
+			action="#{documentControllers.submitUpload()}">	
+		</p:commandButton>
 	</h:form>
 </ui:composition>
 </html>
