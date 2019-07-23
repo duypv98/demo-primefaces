@@ -13,7 +13,7 @@ public class Document {
 	private String type;
 	private int userID;
 	private Date dateCreated;
-	private String filePath;
+	private String fileName;
 	private boolean isDelete = false;
 
 	public Document() {
@@ -60,12 +60,12 @@ public class Document {
 		this.dateCreated = dateCreated;
 	}
 
-	public String getFilePath() {
-		return filePath;
+	public String getFileName() {
+		return fileName;
 	}
 
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	public boolean isDelete() {

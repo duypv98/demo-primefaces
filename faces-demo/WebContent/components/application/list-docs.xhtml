@@ -27,7 +27,8 @@
 	</h:form>
 	<h:form>
 		<p:dataTable id="documentList"
-			value="#{documentViewControllers.getAllDocuments()}" var="doc" border="2">
+			value="#{documentViewControllers.getAllDocuments()}" var="doc"
+			border="2">
 			<p:column style="width: 5%;">
 				<f:facet name="header">ID</f:facet>
 			#{doc.id}
@@ -50,12 +51,13 @@
 		</p:column>
 			<p:column>
 				<f:facet name="header" colspan="3">Action</f:facet>
-				<p:commandButton update="documentList" value="View" icon="fa fa-eye"
-					onclick="PF('viewDlg').show();" />
+				<p:commandButton value="View" icon="fa fa-eye" update="documentList"
+					action="#{documentViewControllers.viewDocument(doc.id)}" />
 				<p:commandButton update="documentList" value="Edit"
 					icon="fa fa-edit" rendered="#{documentViewControllers.userOp(doc)}" />
 				<p:commandButton update="documentList" value="Delete"
-					icon="fa fa-close" rendered="#{documentViewControllers.userOp(doc)}">
+					icon="fa fa-close" action="#{documentViewControllers.removeDocument(doc.id)}"
+					rendered="#{documentViewControllers.userOp(doc)}">
 					<p:confirm header="Confirm delete" message="Are you sure ?"
 						icon="fa fa-warning" />
 				</p:commandButton>
@@ -71,11 +73,6 @@
 		</p:dataTable>
 	</h:form>
 	<!-- Dialog -->
-	<p:dialog showEffect="slide" hideEffect="slide" widgetVar="viewDlg"
-		resizable="true" responsive="true" width="100vw" height="100vh"
-		closeOnEscape="true">
-		<h:outputText value="F*ck" />
-	</p:dialog>
 	<p:dialog showEffect="fade" hideEffect="fade"
 		header="Uploading new file..." widgetVar="uploadDlg"
 		fitViewport="true" resizable="false">
