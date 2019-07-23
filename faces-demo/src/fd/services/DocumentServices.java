@@ -37,6 +37,21 @@ public class DocumentServices {
 		return documents;
 	}
 
+	public List<String> getAllDocumentTypes() throws Exception {
+		MySQLConnector connectionManager = new MySQLConnector();
+		connectionManager.connect();
+		List<String> documentTypes = new ArrayList<String>();
+		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				ResultSet.CONCUR_READ_ONLY);
+		String sql = "SELECT DISTINCT type FROM documents WHERE deleted_at IS NULL;";
+		ResultSet rs = st.executeQuery(sql);
+		
+		while (rs.next()) {
+			documentTypes.add(rs.getString("type"));
+		}
+		return documentTypes;
+	}
+
 	public Document getDocumentByID(int id) throws Exception {
 		MySQLConnector connectionManager = new MySQLConnector();
 		connectionManager.connect();
@@ -72,7 +87,7 @@ public class DocumentServices {
 		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				ResultSet.CONCUR_UPDATABLE);
 		String sql = "INSERT INTO documents (name, type, user_id, file_name) VALUES ('" + name + "','" + type + "',"
-				+ userId + ",' " + fileName + "');";
+				+ userId + ",'" + fileName + "');";
 		int rowEffected = st.executeUpdate(sql);
 		connectionManager.close();
 		return (rowEffected != 0);

@@ -76,6 +76,9 @@
 	<p:dialog showEffect="fade" hideEffect="fade"
 		header="Uploading new file..." widgetVar="uploadDlg"
 		fitViewport="true" resizable="false">
+		<ui:insert name="upload-form">
+			<ui:include src="/components/forms/upload-form.xhtml" />
+		</ui:insert>
 	</p:dialog>
 </ui:composition>
 </html>

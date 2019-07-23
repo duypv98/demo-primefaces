@@ -4,6 +4,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
+import fd.models.Document;
 import fd.models.User;
 import fd.services.UserServices;
 
@@ -13,7 +14,8 @@ public class UserControllers {
 
 	@ManagedProperty(value = "#{user}")
 	User user;
-
+	@ManagedProperty(value = "#{document}")
+	Document document;
 	static UserServices userServices = new UserServices();
 
 	public User getUser() {
@@ -22,6 +24,14 @@ public class UserControllers {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Document getDocument() {
+		return document;
+	}
+
+	public void setDocument(Document document) {
+		this.document = document;
 	}
 
 	public String register() throws Exception {
@@ -37,7 +47,8 @@ public class UserControllers {
 		if (u != null) {
 			user.setLoggedIn(true);
 			user.setUsername(u.getUsername());
-			user.setId(u.getId());;
+			user.setId(u.getId());
+			document.setUserID(u.getId());
 			return "index" + "?faces-redirect=true";
 		} else {
 			return "login" + "?faces-redirect=true";

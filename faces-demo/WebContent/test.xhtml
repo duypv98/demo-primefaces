@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -6,11 +6,13 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
-<ui:composition>
-	<h:form>
-		<p:commandButton value="Back" action="index" icon="fa fa-arrow-left"/>
-	</h:form>
-	<pe:documentViewer value="#{documentViewControllers.originFile}"
-		style="width: 100%; height: 100vh;" />
-</ui:composition>
+<h:body>
+	<h:outputText value="This is name #{document.name}" />
+	<br />
+	<h:outputText value="This is type #{document.type}" />
+	<br />
+	<h:outputText value="user id #{documentControllers.document.userID}" />
+	<br />
+	<h:outputText value="fileName #{document.fileName}" />
+</h:body>
 </html>

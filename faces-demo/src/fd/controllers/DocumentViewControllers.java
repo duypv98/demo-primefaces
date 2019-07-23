@@ -14,13 +14,14 @@ import org.primefaces.model.StreamedContent;
 import fd.models.Document;
 import fd.models.User;
 import fd.services.DocumentServices;
+import io.github.cdimascio.dotenv.Dotenv;
 
 @ManagedBean
 @ApplicationScoped
 public class DocumentViewControllers {
 	@ManagedProperty(value = "#{user}")
 	User user;
-	
+
 	private StreamedContent originFile;
 
 	static DocumentServices documentServices = new DocumentServices();
@@ -29,9 +30,9 @@ public class DocumentViewControllers {
 		List<Document> documents = documentServices.getAllDocuments();
 		return documents;
 	}
+
 	private String test;
-	
-	
+
 	public String getTest() {
 		return test;
 	}
@@ -59,11 +60,13 @@ public class DocumentViewControllers {
 	public boolean userOp(Document document) {
 		return (document.getUserID() == user.getId());
 	}
-	
+
 	public String viewDocument(int id) throws Exception {
+		Dotenv dotenv = Dotenv.configure().directory("E:\\Git\\demo-primefaces\\faces-demo").ignoreIfMalformed()
+				.ignoreIfMissing().load();
 		Document refDoc = documentServices.getDocumentByID(id);
 		String fileName = refDoc.getFileName();
-		String base = "E:\\Git\\demo-primefaces\\faces-demo\\samples\\";
+		String base = dotenv.get("ASSETS_DIR").trim();
 		File file = new File(base + fileName);
 		DefaultStreamedContent sc = new DefaultStreamedContent(new FileInputStream(file), "application/pdf",
 				fileName.substring(0, fileName.lastIndexOf(".")));
@@ -71,7 +74,7 @@ public class DocumentViewControllers {
 		this.originFile = sc;
 		return "view";
 	}
-	
+
 	public String removeDocument(int id) throws Exception {
 		documentServices.deleteDocumentByID(id);
 		return "index" + "?faces-redirect=true";
