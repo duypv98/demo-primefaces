@@ -9,16 +9,24 @@
 <ui:composition>
 	<div class="search-bar">
 		<h:form>
-			<h:panelGrid columns="6" cellpadding="3" id="norm-search">
-				<p:inputText placeholder="Search..." style="width: 50vw;"
+			<h:panelGrid columns="7" cellpadding="1" id="norm-search">
+				<p:inputText placeholder="Search..." style="width: 20vw;"
 					value="#{documentViewControllers.searchString}" />
-				<p:selectOneRadio id="search-by" unselectable="true" required="true"
+				<p:selectOneRadio id="search-by" rendered="true"
 					value="#{documentViewControllers.searchCondition}">
-					<p:ajax update=""></p:ajax>
-					<f:selectItem itemLabel="by name" itemValue="name"/>
-					<f:selectItem itemLabel="by type" itemValue="type"/>
+					<f:selectItem itemLabel="by name" itemValue="name" />
+					<f:selectItem itemLabel="by type" itemValue="type" />
+					<f:selectItem itemLabel="date range" itemValue="date" />
 				</p:selectOneRadio>
-				<p:commandButton icon="fa fa-search" action="#{documentViewControllers.searchDocument()}"/>
+
+				<p:outputLabel for="from-date" value="From" />
+				<p:calendar id="from-date" mask="true" pattern="yyyy-MM-dd"
+					value="#{documentViewControllers.dateFrom}" />
+				<p:outputLabel for="to-date" value="To" />
+				<p:calendar id="to-date" mask="true" pattern="yyyy-MM-dd"
+					value="#{documentViewControllers.dateTo}" />
+				<p:commandButton icon="fa fa-search"
+					action="#{documentViewControllers.searchDocument()}" />
 			</h:panelGrid>
 		</h:form>
 	</div>

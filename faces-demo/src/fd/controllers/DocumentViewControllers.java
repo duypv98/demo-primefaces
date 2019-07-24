@@ -2,6 +2,7 @@ package fd.controllers;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.sql.Date;
 import java.util.List;
 
 import javax.faces.bean.ApplicationScoped;
@@ -29,6 +30,8 @@ public class DocumentViewControllers {
 
 	private String searchString;
 	private String searchCondition;
+	private java.util.Date dateFrom;
+	private java.util.Date dateTo;
 	static DocumentServices documentServices = new DocumentServices();
 
 	public List<Document> getAllDocuments() throws Exception {
@@ -43,6 +46,21 @@ public class DocumentViewControllers {
 		}
 		if (searchCondition.equals("type")) {
 			documents = documentServices.getDocumentsByType(searchString);
+		}
+		if (searchCondition.equals("date")) {
+			if (this.dateFrom == null) {
+				String dTo = new Date(this.dateTo.getTime()).toString();
+				documents = documentServices.getDocumentByDateTo(dTo);
+			}
+			if (this.dateTo == null) {
+				String dFrom = new Date(this.dateFrom.getTime()).toString();
+				documents = documentServices.getDocumentByDateFrom(dFrom);
+			}
+			if (this.dateFrom != null && this.dateTo != null) {
+				String dFrom = new Date(this.dateFrom.getTime()).toString();
+				String dTo = new Date(this.dateTo.getTime()).toString();
+				documents = documentServices.getDocumentByDateRange(dFrom, dTo); 
+			}
 		}
 		return documents;
 	}
@@ -61,6 +79,22 @@ public class DocumentViewControllers {
 
 	public void setSearchCondition(String searchCondition) {
 		this.searchCondition = searchCondition;
+	}
+
+	public java.util.Date getDateFrom() {
+		return dateFrom;
+	}
+
+	public void setDateFrom(java.util.Date dateFrom) {
+		this.dateFrom = dateFrom;
+	}
+
+	public java.util.Date getDateTo() {
+		return dateTo;
+	}
+
+	public void setDateTo(java.util.Date dateTo) {
+		this.dateTo = dateTo;
 	}
 
 	public StreamedContent getOriginFile() {
@@ -109,6 +143,8 @@ public class DocumentViewControllers {
 	public String returnIndexFromSearch() {
 		setSearchString(null);
 		setSearchCondition(null);
+		setDateFrom(null);
+		setDateTo(null);
 		return "index";
 	}
 }

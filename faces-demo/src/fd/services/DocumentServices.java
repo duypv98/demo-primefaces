@@ -130,14 +130,82 @@ public class DocumentServices {
 		connectionManager.close();
 		return documents;
 	}
-	
+
 	public List<Document> getDocumentsByType(String q) throws Exception {
 		MySQLConnector connectionManager = new MySQLConnector();
 		connectionManager.connect();
 		List<Document> documents = new ArrayList<Document>();
 		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				ResultSet.CONCUR_READ_ONLY);
-		String sql = "SELECT * FROM documents WHERE deleted_at IS NULL AND type LIKE '%"+ q +"%';";
+		String sql = "SELECT * FROM documents WHERE deleted_at IS NULL AND type LIKE '%" + q + "%';";
+		ResultSet rs = st.executeQuery(sql);
+
+		while (rs.next()) {
+			Document doc = new Document();
+			doc.setId(rs.getInt("id"));
+			doc.setName(rs.getString("name"));
+			doc.setType(rs.getString("type"));
+			doc.setDateCreated(new Date(rs.getTimestamp("created_at").getTime()));
+			doc.setUserID(rs.getInt("user_id"));
+			doc.setFileName(rs.getString("file_name"));
+			documents.add(doc);
+		}
+		connectionManager.close();
+		return documents;
+	}
+
+	public List<Document> getDocumentByDateRange(String dFrom, String dTo) throws Exception {
+		MySQLConnector connectionManager = new MySQLConnector();
+		connectionManager.connect();
+		List<Document> documents = new ArrayList<Document>();
+		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				ResultSet.CONCUR_READ_ONLY);
+		String sql = "SELECT * FROM documents WHERE deleted_at IS NULL AND created_at >= '" + dFrom
+				+ "' AND created_at <= '" + dTo + "';";
+		ResultSet rs = st.executeQuery(sql);
+
+		while (rs.next()) {
+			Document doc = new Document();
+			doc.setId(rs.getInt("id"));
+			doc.setName(rs.getString("name"));
+			doc.setType(rs.getString("type"));
+			doc.setDateCreated(new Date(rs.getTimestamp("created_at").getTime()));
+			doc.setUserID(rs.getInt("user_id"));
+			doc.setFileName(rs.getString("file_name"));
+			documents.add(doc);
+		}
+		connectionManager.close();
+		return documents;
+	}
+	public List<Document> getDocumentByDateTo(String dTo) throws Exception {
+		MySQLConnector connectionManager = new MySQLConnector();
+		connectionManager.connect();
+		List<Document> documents = new ArrayList<Document>();
+		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				ResultSet.CONCUR_READ_ONLY);
+		String sql = "SELECT * FROM documents WHERE deleted_at IS NULL AND created_at <= '" + dTo + "';";
+		ResultSet rs = st.executeQuery(sql);
+
+		while (rs.next()) {
+			Document doc = new Document();
+			doc.setId(rs.getInt("id"));
+			doc.setName(rs.getString("name"));
+			doc.setType(rs.getString("type"));
+			doc.setDateCreated(new Date(rs.getTimestamp("created_at").getTime()));
+			doc.setUserID(rs.getInt("user_id"));
+			doc.setFileName(rs.getString("file_name"));
+			documents.add(doc);
+		}
+		connectionManager.close();
+		return documents;
+	}
+	public List<Document> getDocumentByDateFrom(String dFrom) throws Exception {
+		MySQLConnector connectionManager = new MySQLConnector();
+		connectionManager.connect();
+		List<Document> documents = new ArrayList<Document>();
+		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				ResultSet.CONCUR_READ_ONLY);
+		String sql = "SELECT * FROM documents WHERE deleted_at IS NULL AND created_at >= '" + dFrom + "';";
 		ResultSet rs = st.executeQuery(sql);
 
 		while (rs.next()) {
