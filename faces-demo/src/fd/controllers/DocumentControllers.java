@@ -33,6 +33,8 @@ public class DocumentControllers {
 	User user;
 
 	static DocumentServices documentServices = new DocumentServices();
+	static String fileName;
+	static InputStream fileStream;
 
 	private String documentType;
 	private Map<String, String> documentTypes = new HashMap<String, String>();
@@ -83,20 +85,13 @@ public class DocumentControllers {
 		this.user = user;
 	}
 
-	public void upload(FileUploadEvent event) {
+	public void upload(FileUploadEvent event) throws IOException {
 		document.setType(documentType);
-		String altName = document.getName();
-		String fileName = event.getFile().getFileName().trim();
-		if (altName == "")
-			document.setName(fileName);
-		document.setFileName(fileName);
+		document.setFileName(event.getFile().getFileName());
 		FacesMessage msg = new FacesMessage("Success !", event.getFile().getFileName() + " is uploaded.");
 		FacesContext.getCurrentInstance().addMessage("messages", msg);
-		try {
-			copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		fileName = event.getFile().getFileName();
+		fileStream = event.getFile().getInputstream();
 	}
 
 	public void copyFile(String fileName, InputStream in) {
@@ -121,6 +116,11 @@ public class DocumentControllers {
 	}
 
 	public String submitUpload() throws Exception {
+		try {
+			copyFile(fileName, fileStream);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		documentServices.uploadNewDocument(document.getName(), document.getType(), user.getId(),
 				document.getFileName());
 		return "index" + "?faces-redirect=true";
