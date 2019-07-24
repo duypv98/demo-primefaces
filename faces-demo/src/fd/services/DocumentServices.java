@@ -137,7 +137,7 @@ public class DocumentServices {
 		List<Document> documents = new ArrayList<Document>();
 		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				ResultSet.CONCUR_READ_ONLY);
-		String sql = "SELECT * FROM documents WHERE deleted_at IS NULL AND type = '"+ q +"';";
+		String sql = "SELECT * FROM documents WHERE deleted_at IS NULL AND type LIKE '%"+ q +"%';";
 		ResultSet rs = st.executeQuery(sql);
 
 		while (rs.next()) {

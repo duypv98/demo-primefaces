@@ -18,13 +18,9 @@
 				<f:selectItems value="#{documentControllers.documentTypes}" />
 			</p:selectOneMenu>
 		</h:panelGrid>
-		<p:fileUpload fileUploadListener="#{documentControllers.upload}"
-			mode="advanced" auto="true" allowTypes="/(\.|\/)(pdf)$/"
-			update="messages" />
-		<p:growl id="messages" showDetail="true" sticky="true" />
-		<p:commandButton value="Submit"
-			action="#{documentControllers.submitUpload()}" icon="fa fa-plus">	
+		<p:commandButton value="Save" icon="fa fa-save">	
 		</p:commandButton>
+		<p:commandButton value="Cancel" icon="fa fa-times" />
 	</h:form>
 </ui:composition>
 </html>

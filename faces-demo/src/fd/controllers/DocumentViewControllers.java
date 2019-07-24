@@ -35,17 +35,18 @@ public class DocumentViewControllers {
 		List<Document> documents = documentServices.getAllDocuments();
 		return documents;
 	}
-
-//	private String test;
-//
-//	public String getTest() {
-//		return test;
-//	}
-//
-//	public void setTest(String test) {
-//		this.test = test;
-//	}
-
+	
+	public List<Document> getDocumentsBySearch() throws Exception {
+		List<Document> documents = null;
+		if (searchCondition.equals("name")) {
+			documents = documentServices.getDocumentsByName(searchString);
+		}
+		if (searchCondition.equals("type")) {
+			documents = documentServices.getDocumentsByType(searchString);
+		}
+		return documents;
+	}
+	
 	public String getSearchString() {
 		return searchString;
 	}
@@ -93,7 +94,7 @@ public class DocumentViewControllers {
 		this.originFile = sc;
 		return "view";
 	}
-
+	
 	public String removeDocument(int id) throws Exception {
 		File file = new File(dotenv.get("ASSETS_DIR") + documentServices.getDocumentByID(id).getFileName());
 		file.delete();
@@ -102,6 +103,12 @@ public class DocumentViewControllers {
 	}
 	
 	public String searchDocument() {
-		return "search" + "?faces-redirect=true";
+		return "search";
+	}
+	
+	public String returnIndexFromSearch() {
+		setSearchString(null);
+		setSearchCondition(null);
+		return "index";
 	}
 }
