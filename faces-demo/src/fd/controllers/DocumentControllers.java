@@ -34,6 +34,7 @@ public class DocumentControllers {
 
 	static DocumentServices documentServices = new DocumentServices();
 	static String fileName;
+	static String altName;
 	static InputStream fileStream;
 
 	private String documentType;
@@ -85,6 +86,12 @@ public class DocumentControllers {
 		this.user = user;
 	}
 
+	public void resetValue() {
+		document.setName(null);
+		document.setType(null);
+		document.setFileName(null);
+	}
+
 	public void upload(FileUploadEvent event) throws IOException {
 		document.setType(documentType);
 		document.setFileName(event.getFile().getFileName());
@@ -92,12 +99,18 @@ public class DocumentControllers {
 		FacesContext.getCurrentInstance().addMessage("messages", msg);
 		fileName = event.getFile().getFileName();
 		fileStream = event.getFile().getInputstream();
+		altName = fileName;
 	}
 
-	public void copyFile(String fileName, InputStream in) {
+	public void copyFile(String fileName, InputStream in) throws Exception {
 		Dotenv dotenv = Dotenv.configure().directory("E:\\Git\\demo-primefaces\\faces-demo").ignoreIfMalformed()
 				.ignoreIfMissing().load();
 		String destination = dotenv.get("UPLOAD_DIR");
+		int exFiles = documentServices.existedFiles(fileName.substring(0, fileName.lastIndexOf(".")));
+		if (exFiles > 0) {
+			fileName = fileName.substring(0, fileName.lastIndexOf(".")) + "_v" + exFiles + ".pdf";
+			altName = fileName;
+		}
 		try {
 			OutputStream out = new FileOutputStream(new File(destination + fileName));
 
@@ -121,8 +134,17 @@ public class DocumentControllers {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		documentServices.uploadNewDocument(document.getName(), document.getType(), user.getId(),
-				document.getFileName());
+		if (document.getName().isEmpty()) {
+			documentServices.uploadNewDocument(document.getFileName(), document.getType(), user.getId(),
+					altName);
+		} else {
+			documentServices.uploadNewDocument(document.getName(), document.getType(), user.getId(),
+					altName);
+		}
+		documentTypes.put(document.getType(), document.getType());
+		document.setName(null);
+		document.setFileName(null);
 		return "index" + "?faces-redirect=true";
+
 	}
 }

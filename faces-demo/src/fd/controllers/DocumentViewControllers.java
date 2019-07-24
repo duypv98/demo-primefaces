@@ -22,6 +22,9 @@ public class DocumentViewControllers {
 	@ManagedProperty(value = "#{user}")
 	User user;
 
+	static Dotenv dotenv = Dotenv.configure().directory("E:\\Git\\demo-primefaces\\faces-demo").ignoreIfMalformed()
+			.ignoreIfMissing().load();
+
 	private StreamedContent originFile;
 
 	static DocumentServices documentServices = new DocumentServices();
@@ -62,8 +65,7 @@ public class DocumentViewControllers {
 	}
 
 	public String viewDocument(int id) throws Exception {
-		Dotenv dotenv = Dotenv.configure().directory("E:\\Git\\demo-primefaces\\faces-demo").ignoreIfMalformed()
-				.ignoreIfMissing().load();
+
 		Document refDoc = documentServices.getDocumentByID(id);
 		String fileName = refDoc.getFileName();
 		String base = dotenv.get("ASSETS_DIR").trim();
@@ -76,6 +78,8 @@ public class DocumentViewControllers {
 	}
 
 	public String removeDocument(int id) throws Exception {
+		File file = new File(dotenv.get("ASSETS_DIR") + documentServices.getDocumentByID(id).getFileName());
+		file.delete();
 		documentServices.deleteDocumentByID(id);
 		return "index" + "?faces-redirect=true";
 	}

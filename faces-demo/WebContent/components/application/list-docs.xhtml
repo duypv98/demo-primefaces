@@ -56,7 +56,8 @@
 				<p:commandButton update="documentList" value="Edit"
 					icon="fa fa-edit" rendered="#{documentViewControllers.userOp(doc)}" />
 				<p:commandButton update="documentList" value="Delete"
-					icon="fa fa-close" action="#{documentViewControllers.removeDocument(doc.id)}"
+					icon="fa fa-close"
+					action="#{documentViewControllers.removeDocument(doc.id)}"
 					rendered="#{documentViewControllers.userOp(doc)}">
 					<p:confirm header="Confirm delete" message="Are you sure ?"
 						icon="fa fa-warning" />

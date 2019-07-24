@@ -45,7 +45,7 @@ public class DocumentServices {
 				ResultSet.CONCUR_READ_ONLY);
 		String sql = "SELECT DISTINCT type FROM documents WHERE deleted_at IS NULL;";
 		ResultSet rs = st.executeQuery(sql);
-		
+
 		while (rs.next()) {
 			documentTypes.add(rs.getString("type"));
 		}
@@ -91,5 +91,20 @@ public class DocumentServices {
 		int rowEffected = st.executeUpdate(sql);
 		connectionManager.close();
 		return (rowEffected != 0);
+	}
+
+	public int existedFiles(String name) throws Exception {
+		MySQLConnector connectionManager = new MySQLConnector();
+		connectionManager.connect();
+		int count = 0;
+		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				ResultSet.CONCUR_READ_ONLY);
+		String sql = "SELECT * FROM documents WHERE deleted_at IS NULL AND file_name LIKE BINARY '" + name + "%';";
+		ResultSet rs = st.executeQuery(sql);
+		while (rs.next()) {
+			count++;
+		}
+		connectionManager.close();
+		return count;
 	}
 }
