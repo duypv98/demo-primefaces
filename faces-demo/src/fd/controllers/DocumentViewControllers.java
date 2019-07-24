@@ -100,4 +100,8 @@ public class DocumentViewControllers {
 		documentServices.deleteDocumentByID(id);
 		return "index" + "?faces-redirect=true";
 	}
+	
+	public String searchDocument() {
+		return "search" + "?faces-redirect=true";
+	}
 }
