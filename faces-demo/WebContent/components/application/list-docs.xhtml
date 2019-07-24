@@ -7,7 +7,9 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
-	<h2>All Documents</h2>
+	<h:panelGroup layout="block">
+		<h2>All Documents</h2>
+	</h:panelGroup>
 	<h:panelGroup layout="block"
 		style="display: inline-block; display: flex; flex-direction: row-reverse;"
 		rendered="#{user.loggedIn}">
@@ -25,6 +27,9 @@
 				style="color: green;" />
 		</h:panelGroup>
 	</h:form>
+	<ui:insert name="search">
+		<ui:include src="/components/application/search-bar.xhtml" />
+	</ui:insert>
 	<h:form>
 		<p:dataTable id="documentList"
 			value="#{documentViewControllers.getAllDocuments()}" var="doc"

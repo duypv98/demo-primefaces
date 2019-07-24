@@ -7,12 +7,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <h:body>
-	<h:outputText value="This is name #{document.name}" />
-	<br />
-	<h:outputText value="This is type #{document.type}" />
-	<br />
-	<h:outputText value="user id #{documentControllers.document.userID}" />
-	<br />
-	<h:outputText value="fileName #{document.fileName}" />
+	<h:outputText value="Search #{documentViewControllers.searchString}" />
+	<h:outputText value="By #{documentViewControllers.searchCondition}" />
 </h:body>
 </html>

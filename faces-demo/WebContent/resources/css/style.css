@@ -97,3 +97,8 @@ body {
 	color: red; !important;
 	font-weight: bold;
 }
+
+.search-bar {
+	display: flex;
+	flex-direction: row-reverse;
+}

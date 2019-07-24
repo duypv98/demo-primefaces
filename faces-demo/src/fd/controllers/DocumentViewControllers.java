@@ -27,6 +27,8 @@ public class DocumentViewControllers {
 
 	private StreamedContent originFile;
 
+	private String searchString;
+	private String searchCondition;
 	static DocumentServices documentServices = new DocumentServices();
 
 	public List<Document> getAllDocuments() throws Exception {
@@ -34,14 +36,30 @@ public class DocumentViewControllers {
 		return documents;
 	}
 
-	private String test;
+//	private String test;
+//
+//	public String getTest() {
+//		return test;
+//	}
+//
+//	public void setTest(String test) {
+//		this.test = test;
+//	}
 
-	public String getTest() {
-		return test;
+	public String getSearchString() {
+		return searchString;
 	}
 
-	public void setTest(String test) {
-		this.test = test;
+	public void setSearchString(String searchString) {
+		this.searchString = searchString;
+	}
+
+	public String getSearchCondition() {
+		return searchCondition;
+	}
+
+	public void setSearchCondition(String searchCondition) {
+		this.searchCondition = searchCondition;
 	}
 
 	public StreamedContent getOriginFile() {
@@ -72,7 +90,6 @@ public class DocumentViewControllers {
 		File file = new File(base + fileName);
 		DefaultStreamedContent sc = new DefaultStreamedContent(new FileInputStream(file), "application/pdf",
 				fileName.substring(0, fileName.lastIndexOf(".")));
-		this.test = fileName;
 		this.originFile = sc;
 		return "view";
 	}
