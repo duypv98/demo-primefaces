@@ -9,26 +9,33 @@
 <ui:composition>
 	<div class="search-bar">
 		<h:form>
-			<h:panelGrid columns="7" cellpadding="1" id="norm-search">
+			<h:panelGrid columns="7" cellpadding="1">
 				<p:inputText placeholder="Search..." style="width: 20vw;"
 					value="#{documentViewControllers.searchString}" />
-				<p:selectOneRadio id="search-by" rendered="true"
+				<p:selectOneRadio id="search-by" required="true"
 					value="#{documentViewControllers.searchCondition}">
-					<f:selectItem itemLabel="by name" itemValue="name" />
-					<f:selectItem itemLabel="by type" itemValue="type" />
-					<f:selectItem itemLabel="date range" itemValue="date" />
+					<f:selectItem itemLabel="By Name" itemValue="name" />
+					<f:selectItem itemLabel="By Type" itemValue="type" />
 				</p:selectOneRadio>
-
-				<p:outputLabel for="from-date" value="From" />
-				<p:calendar id="from-date" mask="true" pattern="yyyy-MM-dd"
-					value="#{documentViewControllers.dateFrom}" />
-				<p:outputLabel for="to-date" value="To" />
-				<p:calendar id="to-date" mask="true" pattern="yyyy-MM-dd"
-					value="#{documentViewControllers.dateTo}" />
+				<p:commandButton value="Anytime ?" icon="fa fa-calendar"
+					oncomplete="PF('dateRangeDlg').show();" />
 				<p:commandButton icon="fa fa-search"
 					action="#{documentViewControllers.searchDocument()}" />
 			</h:panelGrid>
 		</h:form>
 	</div>
+	<p:dialog widgetVar="dateRangeDlg" resizable="false"
+		closeOnEscape="true" header="Custom Range...">
+		<h:form>
+			<h:panelGrid columns="2" cellpadding="3">
+				<p:outputLabel for="@next" value="From:" />
+				<p:calendar value="#{documentViewControllers.dateFrom}" />
+
+				<p:outputLabel for="@next" value="To:" />
+				<p:calendar value="#{documentViewControllers.dateTo}" />
+			</h:panelGrid>
+			<p:commandButton value="OK" oncomplete="PF('dateRangeDlg').hide()" />
+		</h:form>
+	</p:dialog>
 </ui:composition>
 </html>

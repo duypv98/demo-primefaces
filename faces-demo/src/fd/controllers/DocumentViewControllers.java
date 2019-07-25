@@ -29,7 +29,7 @@ public class DocumentViewControllers {
 	private StreamedContent originFile;
 
 	private String searchString;
-	private String searchCondition;
+	private String searchCondition = "name";
 	private java.util.Date dateFrom;
 	private java.util.Date dateTo;
 	static DocumentServices documentServices = new DocumentServices();
@@ -41,30 +41,29 @@ public class DocumentViewControllers {
 	
 	public List<Document> getDocumentsBySearch() throws Exception {
 		List<Document> documents = null;
+		Date dFrom;
+		Date dTo;
+		if (dateFrom != null) {
+			dFrom = new Date(dateFrom.getTime());
+		} else {
+			dFrom = null;
+		}
+		if (dateTo != null) {
+			dTo = new Date(dateTo.getTime());
+		} else {
+			dTo = null;
+		}
 		if (searchCondition.equals("name")) {
-			documents = documentServices.getDocumentsByName(searchString);
+			
+			documents = documentServices.getDocumentsByName(searchString, dFrom, dTo);
 		}
 		if (searchCondition.equals("type")) {
-			documents = documentServices.getDocumentsByType(searchString);
-		}
-		if (searchCondition.equals("date")) {
-			if (this.dateFrom == null) {
-				String dTo = new Date(this.dateTo.getTime()).toString();
-				documents = documentServices.getDocumentByDateTo(dTo);
-			}
-			if (this.dateTo == null) {
-				String dFrom = new Date(this.dateFrom.getTime()).toString();
-				documents = documentServices.getDocumentByDateFrom(dFrom);
-			}
-			if (this.dateFrom != null && this.dateTo != null) {
-				String dFrom = new Date(this.dateFrom.getTime()).toString();
-				String dTo = new Date(this.dateTo.getTime()).toString();
-				documents = documentServices.getDocumentByDateRange(dFrom, dTo); 
-			}
+			documents = documentServices.getDocumentsByType(searchString, dFrom, dTo);
 		}
 		return documents;
 	}
 	
+
 	public String getSearchString() {
 		return searchString;
 	}
@@ -145,6 +144,6 @@ public class DocumentViewControllers {
 		setSearchCondition(null);
 		setDateFrom(null);
 		setDateTo(null);
-		return "index";
+		return "index" + "?faces-redirect=true";
 	}
 }
