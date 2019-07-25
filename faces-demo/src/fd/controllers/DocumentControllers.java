@@ -135,16 +135,29 @@ public class DocumentControllers {
 			e.printStackTrace();
 		}
 		if (document.getName().isEmpty()) {
-			documentServices.uploadNewDocument(document.getFileName(), document.getType(), user.getId(),
-					altName);
+			documentServices.uploadNewDocument(document.getFileName(), document.getType(), user.getId(), altName);
 		} else {
-			documentServices.uploadNewDocument(document.getName(), document.getType(), user.getId(),
-					altName);
+			documentServices.uploadNewDocument(document.getName(), document.getType(), user.getId(), altName);
 		}
 		documentTypes.put(document.getType(), document.getType());
 		document.setName(null);
 		document.setFileName(null);
 		return "index" + "?faces-redirect=true";
 
+	}
+
+	public String editDocument(int id) throws Exception {
+		Document refDoc = documentServices.getDocumentByID(id);
+		document.setId(refDoc.getId());
+		document.setName(refDoc.getName());
+		document.setFileName(refDoc.getFileName());
+		return "edit";
+	}
+
+	public String submitEdit() throws Exception {
+		documentServices.updateDocumentByID(document.getId(), document.getName(), document.getType());
+		document.setId(0);
+		document.setName(null);
+		return "index" + "?faces-redirect=true";
 	}
 }

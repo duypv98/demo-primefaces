@@ -6,9 +6,9 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean
 @ApplicationScoped
 public class User {
-	private int id;
-	private String username;
-	private String password;
+	private int id = 0;
+	private String username = null;
+	private String password = null;
 	private boolean loggedIn = false;
 
 	public User() {

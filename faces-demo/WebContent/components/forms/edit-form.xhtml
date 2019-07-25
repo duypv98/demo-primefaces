@@ -7,20 +7,23 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
 	<h:form>
-		<h:panelGrid columns="2" cellpadding="5">
-			<p:outputLabel for="@next" value="Alt Name Document:" />
-			<p:inputText id="docName" value="#{document.name}"
-				label="Document's Name"/>
+		<p:panel header="Edit document">
+			<h:panelGrid columns="2" cellpadding="5">
+				<p:outputLabel for="@next" value="Alt Name Document:" />
+				<p:inputText id="docName" value="#{document.name}"
+					label="Document's Name" />
 
-			<p:outputLabel for="@next" value="Type" />
-			<p:selectOneMenu id="docType" effect="fold" editable="true"
-				value="#{document.type}" required="true">
-				<f:selectItems value="#{documentControllers.documentTypes}" />
-			</p:selectOneMenu>
-		</h:panelGrid>
-		<p:commandButton value="Save" icon="fa fa-save">	
-		</p:commandButton>
-		<p:commandButton value="Cancel" icon="fa fa-times" />
+				<p:outputLabel for="@next" value="Type" />
+				<p:selectOneMenu id="docType" effect="fold" editable="true"
+					value="#{document.type}" required="true">
+					<f:selectItems value="#{documentControllers.documentTypes}" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+			<f:facet name="footer">
+				<p:commandButton value="Save" icon="fa fa-save" action="#{documentControllers.submitEdit()}"/>
+				<p:commandButton value="Cancel" icon="fa fa-times" action="#{navigator.home()}"/>
+			</f:facet>
+		</p:panel>
 	</h:form>
 </ui:composition>
 </html>
