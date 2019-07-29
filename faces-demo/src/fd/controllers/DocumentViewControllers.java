@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.sql.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -28,19 +29,40 @@ public class DocumentViewControllers {
 
 	private StreamedContent originFile;
 
+	private String contentTitle = "All Documents";
 	private String searchString;
-	private String searchCondition = "name";
+	private String searchType;
 	private java.util.Date dateFrom;
 	private java.util.Date dateTo;
+	private List<Document> allDocuments;
 	static DocumentServices documentServices = new DocumentServices();
 
-	public List<Document> getAllDocuments() throws Exception {
-		List<Document> documents = documentServices.getAllDocuments();
-		return documents;
+	@PostConstruct
+	public void init() {
+		try {
+			allDocuments = documentServices.getAllDocuments();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
-	public List<Document> getDocumentsBySearch() throws Exception {
-		List<Document> documents = null;
+
+	public String getContentTitle() {
+		return contentTitle;
+	}
+
+	public void setContentTitle(String contentTitle) {
+		this.contentTitle = contentTitle;
+	}
+
+	public List<Document> getAllDocuments() {
+		return allDocuments;
+	}
+
+	public void setAllDocuments(List<Document> allDocuments) {
+		this.allDocuments = allDocuments;
+	}
+
+	public void getDocumentsBySearch() throws Exception {
 		Date dFrom;
 		Date dTo;
 		if (dateFrom != null) {
@@ -53,16 +75,10 @@ public class DocumentViewControllers {
 		} else {
 			dTo = null;
 		}
-		if (searchCondition.equals("name")) {
-			
-			documents = documentServices.getDocumentsByName(searchString, dFrom, dTo);
-		}
-		if (searchCondition.equals("type")) {
-			documents = documentServices.getDocumentsByType(searchString, dFrom, dTo);
-		}
-		return documents;
+		allDocuments.clear();
+		contentTitle = "Search Result";
+		allDocuments = documentServices.getDocumentsBySearch(searchString, searchType, dFrom, dTo);
 	}
-	
 
 	public String getSearchString() {
 		return searchString;
@@ -72,12 +88,12 @@ public class DocumentViewControllers {
 		this.searchString = searchString;
 	}
 
-	public String getSearchCondition() {
-		return searchCondition;
+	public String getSearchType() {
+		return searchType;
 	}
 
-	public void setSearchCondition(String searchCondition) {
-		this.searchCondition = searchCondition;
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
 	}
 
 	public java.util.Date getDateFrom() {
@@ -127,23 +143,21 @@ public class DocumentViewControllers {
 		this.originFile = sc;
 		return "view";
 	}
-	
+
 	public String removeDocument(int id) throws Exception {
 		File file = new File(dotenv.get("ASSETS_DIR") + documentServices.getDocumentByID(id).getFileName());
 		file.delete();
 		documentServices.deleteDocumentByID(id);
 		return "index" + "?faces-redirect=true";
 	}
-	
-	public String searchDocument() {
-		return "search";
-	}
-	
-	public String returnIndexFromSearch() {
-		setSearchString(null);
-		setSearchCondition(null);
-		setDateFrom(null);
-		setDateTo(null);
-		return "index" + "?faces-redirect=true";
+
+	public void showAllDocuments() throws Exception {
+		searchString = null;
+		searchType = null;
+		dateFrom = null;
+		dateTo = null;
+		contentTitle = "All Documents";
+		allDocuments.clear();
+		allDocuments = documentServices.getAllDocuments();
 	}
 }

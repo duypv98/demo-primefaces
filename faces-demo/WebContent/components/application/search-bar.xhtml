@@ -8,34 +8,35 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 	<div class="search-bar">
-		<h:form>
-			<h:panelGrid columns="7" cellpadding="1">
-				<p:inputText placeholder="Search..." style="width: 20vw;"
-					value="#{documentViewControllers.searchString}" />
-				<p:selectOneRadio id="search-by" required="true"
-					value="#{documentViewControllers.searchCondition}">
-					<f:selectItem itemLabel="By Name" itemValue="name" />
-					<f:selectItem itemLabel="By Type" itemValue="type" />
-				</p:selectOneRadio>
-				<p:commandButton value="Anytime ?" icon="fa fa-calendar"
-					oncomplete="PF('dateRangeDlg').show();" />
+		<h:form id="form-search">
+			<h:panelGrid columns="10" cellpadding="1">
+				<p:outputLabel value="Search: " />
+
+				<p:inputText placeholder="Enter name of document to search...."
+					style="width: 20vw;"
+					value="#{documentViewControllers.searchString}" id="search-name" />
+				<p:selectOneMenu id="search-type"
+					value="#{documentViewControllers.searchType}"
+					placeholder="Select Type">
+					<f:selectItem itemLabel="--Select Type--" itemValue="#{null}"
+						noSelectionOption="true"
+						itemDisabled="#{documentViewControllers.searchType ne null}" />
+					<f:selectItems value="#{documentControllers.documentTypes}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel for="@next" value="From:" />
+				<p:calendar value="#{documentViewControllers.dateFrom}"
+					id="search-date-from" />
+
+				<p:outputLabel for="@next" value="To:" />
+				<p:calendar value="#{documentViewControllers.dateTo}"
+					id="search-date-to" />
 				<p:commandButton icon="fa fa-search"
-					action="#{documentViewControllers.searchDocument()}" />
+					action="#{documentViewControllers.getDocumentsBySearch()}"
+					process="@this form-search"
+					update="list:documentList content-title" />
 			</h:panelGrid>
 		</h:form>
 	</div>
-	<p:dialog widgetVar="dateRangeDlg" resizable="false"
-		closeOnEscape="true" header="Custom Range...">
-		<h:form>
-			<h:panelGrid columns="2" cellpadding="3">
-				<p:outputLabel for="@next" value="From:" />
-				<p:calendar value="#{documentViewControllers.dateFrom}" />
-
-				<p:outputLabel for="@next" value="To:" />
-				<p:calendar value="#{documentViewControllers.dateTo}" />
-			</h:panelGrid>
-			<p:commandButton value="OK" oncomplete="PF('dateRangeDlg').hide()" />
-		</h:form>
-	</p:dialog>
 </ui:composition>
 </html>

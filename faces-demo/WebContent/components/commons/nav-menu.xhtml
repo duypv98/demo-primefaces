@@ -9,9 +9,6 @@
 	<div id="left">
 		<h:form id="menu-bar" rendered="#{user.loggedIn}">
 			<p:menu toggleable="true">
-				<p:submenu label="Document">
-					<p:menuitem value="Manage" icon="fa fa-cog" action="#{navigator.home()}"/>
-				</p:submenu>
 				<p:submenu label="User">
 					<p:menuitem value="Infomation" icon="fa fa-user"
 						onclick="PF('infoDlg').show();" />
@@ -27,7 +24,8 @@
 			<hr />
 		</h:panelGroup>
 		<p:dialog header="User's Info" widgetVar="infoDlg"
-			showEffect="explode" hideEffect="fade" resizable="false" closeOnEscape="true" width="255" height="350" >
+			showEffect="explode" hideEffect="fade" resizable="false"
+			closeOnEscape="true" width="255" height="350">
 			<ui:insert name="info">
 				<ui:include src="/components/application/info.xhtml" />
 			</ui:insert>

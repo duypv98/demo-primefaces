@@ -8,7 +8,8 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 	<h:panelGroup layout="block">
-		<h2>All Documents</h2>
+		<h:outputText style="font-weight: bold; font-size: xx-large"
+			id="content-title" value="#{documentViewControllers.contentTitle}" />
 	</h:panelGroup>
 	<h:panelGroup layout="block"
 		style="display: inline-block; display: flex; flex-direction: row-reverse;"
@@ -19,21 +20,25 @@
 		</h:form>
 	</h:panelGroup>
 	<h:form>
-		<h:panelGroup layout="block" rendered="#{!user.loggedIn}">
-			<h:outputText styleClass="alert-text"
-				value="Login to manage your document " />
-			<br />
-			<p:commandLink value="Login here" action="#{navigator.login()}"
-				style="color: green;" />
-		</h:panelGroup>
+		<h:panelGrid columns="3" cellpadding="4">
+			<p:commandButton icon="fa fa-home"
+				action="#{documentViewControllers.showAllDocuments()}"
+				update="list:documentList, content-title, form-search:search-name, form-search:search-type, form-search:search-date-from, form-search:search-date-to" />
+			<h:panelGroup layout="block" rendered="#{!user.loggedIn}">
+				<h:outputText styleClass="alert-text"
+					value="Login to manage your document " />
+				<br />
+				<p:commandLink value="Login here" action="#{navigator.login()}"
+					style="color: green;" />
+			</h:panelGroup>
+		</h:panelGrid>
 	</h:form>
 	<ui:insert name="search">
 		<ui:include src="/components/application/search-bar.xhtml" />
 	</ui:insert>
-	<h:form>
+	<h:form id="list">
 		<p:dataTable id="documentList"
-			value="#{documentViewControllers.getAllDocuments()}" var="doc"
-			border="2">
+			value="#{documentViewControllers.allDocuments}" var="doc" border="2">
 			<p:column style="width: 5%;">
 				<f:facet name="header">ID</f:facet>
 			#{doc.id}
@@ -60,7 +65,7 @@
 					action="#{documentViewControllers.viewDocument(doc.id)}" />
 				<p:commandButton update="documentList" value="Edit"
 					icon="fa fa-edit" rendered="#{documentViewControllers.userOp(doc)}"
-					action="#{documentControllers.editDocument(doc.id)}"/>
+					action="#{documentControllers.editDocument(doc.id)}" />
 				<p:commandButton update="documentList" value="Delete"
 					icon="fa fa-close"
 					action="#{documentViewControllers.removeDocument(doc.id)}"

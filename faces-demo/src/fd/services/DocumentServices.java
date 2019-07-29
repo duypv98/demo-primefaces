@@ -1,6 +1,7 @@
 package fd.services;
 
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -108,72 +109,48 @@ public class DocumentServices {
 		return count;
 	}
 
-	public List<Document> getDocumentsByName(String q, Date from, Date to) throws Exception {
+	public List<Document> getDocumentsBySearch(String q, String type, Date from, Date to) throws Exception {
 		MySQLConnector connectionManager = new MySQLConnector();
 		connectionManager.connect();
+		PreparedStatement ps = null;
+		String sql1 = "SELECT * FROM (SELECT * FROM documents WHERE created_at >= ? AND created_at <= ?) AS t WHERE deleted_at IS NULL AND name LIKE ? AND type = ?;";
+		String sql2 = "SELECT * FROM (SELECT * FROM documents WHERE created_at <= ?) AS t WHERE deleted_at IS NULL AND name LIKE ? AND type = ?;";
+		String sql3 = "SELECT * FROM (SELECT * FROM documents WHERE created_at >= ?) AS t WHERE deleted_at IS NULL AND name LIKE ? AND type = ?;";
+		String sql4 = "SELECT * FROM documents WHERE deleted_at IS NULL AND name LIKE ? AND type = ?;";
 		List<Document> documents = new ArrayList<Document>();
-		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-				ResultSet.CONCUR_READ_ONLY);
-		String sql1 = "SELECT * FROM documents WHERE deleted_at IS NULL AND name LIKE '%" + q + "%';";
-		String sql2 = "SELECT * FROM (" + "SELECT * FROM documents " + "WHERE created_at <= '" + to + "00:00:00') AS t "
-				+ "WHERE deleted_at IS NULL " + "AND name LIKE '%" + q + "%';";
-		String sql3 = "SELECT * FROM (" + "SELECT * FROM documents " + "WHERE created_at >= '" + from
-				+ "00:00:00') AS t " + "WHERE deleted_at IS NULL " + "AND name LIKE '%" + q + "%';";
-		String sql4 = "SELECT * FROM (" + "SELECT * FROM documents " + "WHERE created_at BETWEEN '" + from
-				+ "00:00:00' AND '" + to + " 00:00:00') AS t " + "WHERE deleted_at IS NULL " + "AND name LIKE '%" + q
-				+ "%';";
-		ResultSet rs;
-		if (from == null && to == null) {
-			rs = st.executeQuery(sql1);
-		} else {
-			if (from == null) {
-				rs = st.executeQuery(sql2);
-			} else if (to == null) {
-				rs = st.executeQuery(sql3);
-			} else
-				rs = st.executeQuery(sql4);
+		if (type != null && from != null && to != null) {
+			ps = connectionManager.connection.prepareStatement(sql1, ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+			ps.setDate(1, from);
+			ps.setDate(2, to);
+			ps.setString(3, "%" + q + "%");
+			ps.setString(4, type);
 		}
-
-		while (rs.next()) {
-			Document doc = new Document();
-			doc.setId(rs.getInt("id"));
-			doc.setName(rs.getString("name"));
-			doc.setType(rs.getString("type"));
-			doc.setDateCreated(new Date(rs.getTimestamp("created_at").getTime()));
-			doc.setUserID(rs.getInt("user_id"));
-			doc.setFileName(rs.getString("file_name"));
-			documents.add(doc);
+		if (type != null && from == null && to != null) {
+			ps = connectionManager.connection.prepareStatement(sql2, ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+			ps.setDate(1, to);
+			ps.setString(2, "%" + q + "%");
+			ps.setString(3, type);
 		}
-		connectionManager.close();
-		return documents;
-	}
-
-	public List<Document> getDocumentsByType(String q, Date from, Date to) throws Exception {
-		MySQLConnector connectionManager = new MySQLConnector();
-		connectionManager.connect();
-		List<Document> documents = new ArrayList<Document>();
-		Statement st = connectionManager.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-				ResultSet.CONCUR_READ_ONLY);
-		String sql1 = "SELECT * FROM documents WHERE deleted_at IS NULL AND type LIKE '%" + q + "%';";
-		String sql2 = "SELECT * FROM (" + "SELECT * FROM documents " + "WHERE created_at <= '" + to + "00:00:00') AS t "
-				+ "WHERE deleted_at IS NULL " + "AND type LIKE '%" + q + "%';";
-		String sql3 = "SELECT * FROM (" + "SELECT * FROM documents " + "WHERE created_at >= '" + from
-				+ "00:00:00') AS t " + "WHERE deleted_at IS NULL " + "AND type LIKE '%" + q + "%';";
-		String sql4 = "SELECT * FROM (" + "SELECT * FROM documents " + "WHERE created_at BETWEEN '" + from
-				+ "00:00:00' AND '" + to + " 00:00:00') AS t " + "WHERE deleted_at IS NULL " + "AND type LIKE '%" + q
-				+ "%';";
-		ResultSet rs;
-		if (from == null && to == null) {
-			rs = st.executeQuery(sql1);
-		} else {
-			if (from == null) {
-				rs = st.executeQuery(sql2);
-			} else if (to == null) {
-				rs = st.executeQuery(sql3);
-			} else
-				rs = st.executeQuery(sql4);
+		if (type != null && from != null && to == null) {
+			ps = connectionManager.connection.prepareStatement(sql3, ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+			ps.setDate(1, from);
+			ps.setString(2, "%" + q + "%");
+			ps.setString(3, type);
+		} 
+		if (type != null && from == null && to == null) {
+			ps = connectionManager.connection.prepareStatement(sql4, ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+			ps.setString(1, "%" + q + "%");
+			ps.setString(2, type);
 		}
-
+		
+		if (type == null) {
+			documents = getAllDocuments();
+		}
+		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
 			Document doc = new Document();
 			doc.setId(rs.getInt("id"));
