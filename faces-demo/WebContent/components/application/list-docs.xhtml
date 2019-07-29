@@ -63,8 +63,9 @@
 		</p:column>
 			<p:column>
 				<f:facet name="header" colspan="3">Action</f:facet>
-				<p:commandButton value="View" icon="fa fa-eye" update="documentList"
-					action="#{documentViewControllers.viewDocument(doc.id)}" />
+				<p:commandButton value="View" icon="fa fa-eye" update="viewDlg"
+					action="#{documentControllers.viewDocument(doc.id)}"
+					oncomplete="PF('viewDlg').show();" />
 				<p:commandButton update="documentList, editDlg" value="Edit"
 					icon="fa fa-edit" rendered="#{documentViewControllers.userOp(doc)}"
 					action="#{documentControllers.editDocument(doc.id)}"
@@ -88,9 +89,18 @@
 		</p:dataTable>
 	</h:form>
 	<!-- Dialog -->
+	<p:dialog id="viewDlg" showEffect="fade" hideEffect="fade"
+		header="#{documentControllers.document.name}" widgetVar="viewDlg"
+		fitViewport="true" resizable="false" closeOnEscape="true" width="100%"
+		height="100%" draggable="false">
+		<ui:insert name="view">
+			<ui:include src="/components/application/document-view.xhtml" />
+		</ui:insert>
+	</p:dialog>
 	<p:dialog id="editDlg" showEffect="fade" hideEffect="fade"
-		header="Edit: #{documentControllers.document.name}" widgetVar="editDlg"
-		fitViewport="true" resizable="false" width="800" closable="true" closeOnEscape="true">
+		header="Edit: #{documentControllers.document.name}"
+		widgetVar="editDlg" fitViewport="true" resizable="false" width="800"
+		closable="false">
 		<ui:insert name="edit-form">
 			<ui:include src="/components/forms/edit-form.xhtml" />
 		</ui:insert>

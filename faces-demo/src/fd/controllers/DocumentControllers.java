@@ -1,6 +1,7 @@
 package fd.controllers;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +17,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import fd.models.Document;
 import fd.models.User;
@@ -29,7 +32,8 @@ public class DocumentControllers {
 	Document document;
 	@ManagedProperty(value = "#{user}")
 	User user;
-	
+	static Dotenv dotenv = Dotenv.configure().directory("E:\\Git\\demo-primefaces\\faces-demo").ignoreIfMalformed()
+			.ignoreIfMissing().load();
 	static DocumentServices documentServices = new DocumentServices();
 	static String fileName;
 	static String altName;
@@ -37,6 +41,8 @@ public class DocumentControllers {
 	private String uploadedMessage = null;
 	private String documentType;
 	private Map<String, String> documentTypes = new HashMap<String, String>();
+	private StreamedContent originFile;
+
 	@PostConstruct
 	public void init() {
 		documentTypes = new HashMap<String, String>();
@@ -50,7 +56,15 @@ public class DocumentControllers {
 			documentTypes.put(type, type);
 		}
 	}
-	
+
+	public StreamedContent getOriginFile() {
+		return originFile;
+	}
+
+	public void setOriginFile(StreamedContent originFile) {
+		this.originFile = originFile;
+	}
+
 	public String getUploadedMessage() {
 		return uploadedMessage;
 	}
@@ -152,6 +166,22 @@ public class DocumentControllers {
 		document.setFileName(null);
 		document.setType(null);
 		uploadedMessage = null;
+	}
+
+	public void viewDocument(int id) throws Exception {
+		Document refDoc = documentServices.getDocumentByID(id);
+		document = new Document();
+		document.setId(refDoc.getId());
+		document.setName(refDoc.getName());
+		document.setFileName(refDoc.getFileName());
+		document.setType(refDoc.getType());
+
+		String fileName = refDoc.getFileName();
+		String base = dotenv.get("ASSETS_DIR").trim();
+		File file = new File(base + fileName);
+		DefaultStreamedContent sc = new DefaultStreamedContent(new FileInputStream(file), "application/pdf",
+				fileName.substring(0, fileName.lastIndexOf(".")));
+		originFile = sc;
 	}
 
 	public void editDocument(int id) throws Exception {

@@ -8,9 +8,11 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 	<h:form>
-		<p:commandButton value="Back" action="index" icon="fa fa-arrow-left"/>
+		<p:commandButton value="Back" icon="fa fa-arrow-left"
+			action="#{documentControllers.resetValue()}"
+			oncomplete="PF('viewDlg').hide();" />
 	</h:form>
-	<pe:documentViewer value="#{documentViewControllers.originFile}"
-		style="width: 100%; height: 100vh;" />
+	<pe:documentViewer value="#{documentControllers.originFile}"
+		style="width: 100%; height: 86vh;" />
 </ui:composition>
 </html>

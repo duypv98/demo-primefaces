@@ -1,7 +1,6 @@
 package fd.controllers;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.sql.Date;
 import java.util.List;
 
@@ -9,9 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 
 import fd.models.Document;
 import fd.models.User;
@@ -28,8 +24,6 @@ public class DocumentViewControllers {
 	
 	static Dotenv dotenv = Dotenv.configure().directory("E:\\Git\\demo-primefaces\\faces-demo").ignoreIfMalformed()
 			.ignoreIfMissing().load();
-
-	private StreamedContent originFile;
 
 	private String contentTitle = "All Documents";
 	private String searchString;
@@ -122,14 +116,6 @@ public class DocumentViewControllers {
 		this.dateTo = dateTo;
 	}
 
-	public StreamedContent getOriginFile() {
-		return originFile;
-	}
-
-	public void setOriginFile(StreamedContent originFile) {
-		this.originFile = originFile;
-	}
-
 	public User getUser() {
 		return user;
 	}
@@ -140,18 +126,6 @@ public class DocumentViewControllers {
 
 	public boolean userOp(Document document) {
 		return (document.getUserID() == user.getId());
-	}
-
-	public String viewDocument(int id) throws Exception {
-
-		Document refDoc = documentServices.getDocumentByID(id);
-		String fileName = refDoc.getFileName();
-		String base = dotenv.get("ASSETS_DIR").trim();
-		File file = new File(base + fileName);
-		DefaultStreamedContent sc = new DefaultStreamedContent(new FileInputStream(file), "application/pdf",
-				fileName.substring(0, fileName.lastIndexOf(".")));
-		this.originFile = sc;
-		return "view";
 	}
 
 	public void removeDocument(int id) throws Exception {
