@@ -1,7 +1,7 @@
 # demo-primefaces
 Simple JavaServer Faces - PrimeFaces Application for managing PDF document files
   ## Technologies
-  - [Mojarra JSF 2.x](https://javaserverfaces.github.io/)
+  - [Mojarra JSF 2.2](https://javaserverfaces.github.io/)
   - [PrimeFaces 7](https://www.primefaces.org/#primefaces)
   - [JDBC MySQL 8](https://dev.mysql.com/downloads/connector/j/)
   - [Apache Tomcat 9](https://tomcat.apache.org/download-90.cgi)
