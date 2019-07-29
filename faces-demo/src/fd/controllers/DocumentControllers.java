@@ -154,19 +154,19 @@ public class DocumentControllers {
 		uploadedMessage = null;
 	}
 
-	public String editDocument(int id) throws Exception {
+	public void editDocument(int id) throws Exception {
 		Document refDoc = documentServices.getDocumentByID(id);
+		document = new Document();
 		document.setId(refDoc.getId());
 		document.setName(refDoc.getName());
 		document.setFileName(refDoc.getFileName());
-		return "edit";
+		document.setType(refDoc.getType());
 	}
 
-	public String submitEdit() throws Exception {
+	public void submitEdit() throws Exception {
 		documentServices.updateDocumentByID(document.getId(), document.getName(), document.getType());
 		document.setId(0);
 		document.setName(null);
 		document.setType(null);
-		return "index" + "?faces-redirect=true";
 	}
 }

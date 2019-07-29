@@ -65,9 +65,10 @@
 				<f:facet name="header" colspan="3">Action</f:facet>
 				<p:commandButton value="View" icon="fa fa-eye" update="documentList"
 					action="#{documentViewControllers.viewDocument(doc.id)}" />
-				<p:commandButton update="documentList" value="Edit"
+				<p:commandButton update="documentList, editDlg" value="Edit"
 					icon="fa fa-edit" rendered="#{documentViewControllers.userOp(doc)}"
-					action="#{documentControllers.editDocument(doc.id)}" />
+					action="#{documentControllers.editDocument(doc.id)}"
+					oncomplete="PF('editDlg').show();" />
 				<p:commandButton update="documentList" value="Delete"
 					icon="fa fa-close"
 					action="#{documentViewControllers.removeDocument(doc.id)}"
@@ -87,6 +88,13 @@
 		</p:dataTable>
 	</h:form>
 	<!-- Dialog -->
+	<p:dialog id="editDlg" showEffect="fade" hideEffect="fade"
+		header="Edit: #{documentControllers.document.name}" widgetVar="editDlg"
+		fitViewport="true" resizable="false" width="800" closable="true" closeOnEscape="true">
+		<ui:insert name="edit-form">
+			<ui:include src="/components/forms/edit-form.xhtml" />
+		</ui:insert>
+	</p:dialog>
 	<p:dialog id="uploadDlg" showEffect="fade" hideEffect="fade"
 		header="Uploading new file..." widgetVar="uploadDlg"
 		fitViewport="true" resizable="false" width="800" closable="false">

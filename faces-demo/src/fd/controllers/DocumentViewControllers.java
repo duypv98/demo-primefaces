@@ -176,4 +176,10 @@ public class DocumentViewControllers {
 		allDocuments.clear();
 		allDocuments = documentServices.getAllDocuments();
 	}
+	
+	public void editDocument() throws Exception {
+		documentControllers.submitEdit();
+		allDocuments.clear();
+		allDocuments = documentServices.getAllDocuments();
+	}
 }
