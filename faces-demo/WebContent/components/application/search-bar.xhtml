@@ -15,7 +15,7 @@
 				<p:inputText placeholder="Enter name of document to search...."
 					style="width: 20vw;"
 					value="#{documentViewControllers.searchString}" id="search-name" />
-				<p:selectOneMenu id="search-type"
+				<p:selectOneMenu id="search-type" required="true"
 					value="#{documentViewControllers.searchType}"
 					placeholder="Select Type">
 					<f:selectItem itemLabel="--Select Type--" itemValue="#{null}"
