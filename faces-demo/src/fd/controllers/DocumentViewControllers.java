@@ -23,7 +23,9 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class DocumentViewControllers {
 	@ManagedProperty(value = "#{user}")
 	User user;
-
+	@ManagedProperty(value = "#{documentControllers}")
+	DocumentControllers documentControllers;
+	
 	static Dotenv dotenv = Dotenv.configure().directory("E:\\Git\\demo-primefaces\\faces-demo").ignoreIfMalformed()
 			.ignoreIfMissing().load();
 
@@ -44,6 +46,14 @@ public class DocumentViewControllers {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public DocumentControllers getDocumentControllers() {
+		return documentControllers;
+	}
+
+	public void setDocumentControllers(DocumentControllers documentControllers) {
+		this.documentControllers = documentControllers;
 	}
 
 	public String getContentTitle() {
@@ -144,11 +154,12 @@ public class DocumentViewControllers {
 		return "view";
 	}
 
-	public String removeDocument(int id) throws Exception {
+	public void removeDocument(int id) throws Exception {
 		File file = new File(dotenv.get("ASSETS_DIR") + documentServices.getDocumentByID(id).getFileName());
 		file.delete();
 		documentServices.deleteDocumentByID(id);
-		return "index" + "?faces-redirect=true";
+		allDocuments.clear();
+		allDocuments = documentServices.getAllDocuments();
 	}
 
 	public void showAllDocuments() throws Exception {
@@ -157,6 +168,11 @@ public class DocumentViewControllers {
 		dateFrom = null;
 		dateTo = null;
 		contentTitle = "All Documents";
+		allDocuments.clear();
+		allDocuments = documentServices.getAllDocuments();
+	}
+	public void uploadDocument() throws Exception {
+		documentControllers.submitUpload();
 		allDocuments.clear();
 		allDocuments = documentServices.getAllDocuments();
 	}

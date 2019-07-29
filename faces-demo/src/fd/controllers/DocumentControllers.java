@@ -11,11 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.context.FacesContext;
 
 import org.primefaces.event.FileUploadEvent;
 
@@ -31,15 +29,14 @@ public class DocumentControllers {
 	Document document;
 	@ManagedProperty(value = "#{user}")
 	User user;
-
+	
 	static DocumentServices documentServices = new DocumentServices();
 	static String fileName;
 	static String altName;
 	static InputStream fileStream;
-
+	private String uploadedMessage = null;
 	private String documentType;
 	private Map<String, String> documentTypes = new HashMap<String, String>();
-
 	@PostConstruct
 	public void init() {
 		documentTypes = new HashMap<String, String>();
@@ -52,6 +49,14 @@ public class DocumentControllers {
 		for (String type : allTypes) {
 			documentTypes.put(type, type);
 		}
+	}
+	
+	public String getUploadedMessage() {
+		return uploadedMessage;
+	}
+
+	public void setUploadedMessage(String uploadedMessage) {
+		this.uploadedMessage = uploadedMessage;
 	}
 
 	public String getDocumentType() {
@@ -87,19 +92,22 @@ public class DocumentControllers {
 	}
 
 	public void resetValue() {
+		document = new Document();
 		document.setName(null);
 		document.setType(null);
 		document.setFileName(null);
+		uploadedMessage = null;
 	}
 
 	public void upload(FileUploadEvent event) throws IOException {
+		document = new Document();
 		document.setType(documentType);
 		document.setFileName(event.getFile().getFileName());
-		FacesMessage msg = new FacesMessage("Success !", event.getFile().getFileName() + " is uploaded.");
-		FacesContext.getCurrentInstance().addMessage("messages", msg);
 		fileName = event.getFile().getFileName();
 		fileStream = event.getFile().getInputstream();
 		altName = fileName;
+		document.setName(altName);
+		uploadedMessage = fileName + " is uploaded";
 	}
 
 	public void copyFile(String fileName, InputStream in) throws Exception {
@@ -128,7 +136,7 @@ public class DocumentControllers {
 		}
 	}
 
-	public String submitUpload() throws Exception {
+	public void submitUpload() throws Exception {
 		try {
 			copyFile(fileName, fileStream);
 		} catch (Exception e) {
@@ -142,8 +150,8 @@ public class DocumentControllers {
 		documentTypes.put(document.getType(), document.getType());
 		document.setName(null);
 		document.setFileName(null);
-		return "index" + "?faces-redirect=true";
-
+		document.setType(null);
+		uploadedMessage = null;
 	}
 
 	public String editDocument(int id) throws Exception {
@@ -158,6 +166,7 @@ public class DocumentControllers {
 		documentServices.updateDocumentByID(document.getId(), document.getName(), document.getType());
 		document.setId(0);
 		document.setName(null);
+		document.setType(null);
 		return "index" + "?faces-redirect=true";
 	}
 }

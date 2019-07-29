@@ -16,7 +16,9 @@
 		rendered="#{user.loggedIn}">
 		<h:form>
 			<p:commandButton value="Upload" icon="fa fa-upload"
-				onclick="PF('uploadDlg').show();" />
+				action="#{documentControllers.resetValue()}"
+				update="@widgetVar('uploadDlg')"
+				oncomplete="PF('uploadDlg').show();" />
 		</h:form>
 	</h:panelGroup>
 	<h:form>
@@ -85,9 +87,9 @@
 		</p:dataTable>
 	</h:form>
 	<!-- Dialog -->
-	<p:dialog showEffect="fade" hideEffect="fade"
+	<p:dialog id="uploadDlg" showEffect="fade" hideEffect="fade"
 		header="Uploading new file..." widgetVar="uploadDlg"
-		fitViewport="true" resizable="false" width="800">
+		fitViewport="true" resizable="false" width="800" closable="false">
 		<ui:insert name="upload-form">
 			<ui:include src="/components/forms/upload-form.xhtml" />
 		</ui:insert>
