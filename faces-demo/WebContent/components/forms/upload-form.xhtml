@@ -14,7 +14,7 @@
 
 			<p:outputLabel for="@next" value="Type" />
 			<p:selectOneMenu id="docType" effect="fold" editable="true"
-				value="#{documentControllers.document.type}">
+                                         value="#{documentControllers.documentType}">
 				<f:selectItems value="#{documentControllers.documentTypes}" />
 			</p:selectOneMenu>
 		</h:panelGrid>
@@ -25,7 +25,7 @@
 		<br />
 		<p:commandButton value="Submit"
 			action="#{documentViewControllers.uploadDocument()}" icon="fa fa-plus" 
-			update="list:documentList" oncomplete="PF('uploadDlg').hide(); "/>
+			update="list:documentList, uploadDlg" oncomplete="PF('uploadDlg').hide(); "/>
 		<p:commandButton value="Cancel"
 			action="#{documentControllers.resetValue()}" icon="fa fa-close"
 			update="uploadDlg" oncomplete="PF('uploadDlg').hide();" />

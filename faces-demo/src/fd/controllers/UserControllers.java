@@ -7,64 +7,73 @@ import javax.faces.bean.RequestScoped;
 import fd.models.Document;
 import fd.models.User;
 import fd.services.UserServices;
+import javax.annotation.PostConstruct;
 
 @ManagedBean
 @RequestScoped
 public class UserControllers {
 
-	@ManagedProperty(value = "#{user}")
-	User user;
-	@ManagedProperty(value = "#{document}")
-	Document document;
-	static UserServices userServices = new UserServices();
+    @ManagedProperty(value = "#{user}")
+    User user;
+    @ManagedProperty(value = "#{document}")
+    Document document;
+    static UserServices userServices = new UserServices();
 
-	public User getUser() {
-		return user;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	public Document getDocument() {
-		return document;
-	}
+    public Document getDocument() {
+        return document;
+    }
 
-	public void setDocument(Document document) {
-		this.document = document;
-	}
+    public void setDocument(Document document) {
+        this.document = document;
+    }
 
-	public String register() throws Exception {
-		if (userServices.register(user.getUsername(), user.getPassword())) {
-			return "login" + "?faces-redirect=true";
-		} else {
-			return "register" + "?faces-redirect=true";
-		}
-	}
+    public String register() throws Exception {
+        if (userServices.register(user.getUsername(), user.getPassword())) {
+            return "login" + "?faces-redirect=true";
+        } else {
+            return "register" + "?faces-redirect=true";
+        }
+    }
 
-	public String login() throws Exception {
-		User u = userServices.login(user.getUsername(), user.getPassword());
-		if (u != null) {
-			user.setLoggedIn(true);
-			user.setUsername(u.getUsername());
-			user.setId(u.getId());
-			document.setUserID(u.getId());
-			return "index" + "?faces-redirect=true";
-		} else {
-			return "login" + "?faces-redirect=true";
-		}
-	}
+    public String login() throws Exception {
+        User u = userServices.login(user.getUsername(), user.getPassword());
+        if (u != null) {
+            user.setLoggedIn(true);
+            user.setUsername(u.getUsername());
+            user.setId(u.getId());
+            document.setUserID(u.getId());
+            return "index" + "?faces-redirect=true";
+        } else {
+            return "login" + "?faces-redirect=true";
+        }
+    }
 
-	public String logout() {
-		user.setId(0);
-		user.setUsername(null);
-		user.setPassword(null);
-		user.setLoggedIn(false);
-		return "index" + "?faces-redirect=true";
-	}
-	
-	public String getUsernameById(int id) throws Exception {
-		String res = userServices.getUsernameById(id);
-		return res;
-	}
+    public String logout() {
+        user.setId(0);
+        user.setUsername(null);
+        user.setPassword(null);
+        user.setLoggedIn(false);
+        return "index" + "?faces-redirect=true";
+    }
+
+    public String getUsernameById(int id) throws Exception {
+        String res = userServices.getUsernameById(id);
+        return res;
+    }
+
+    public String getToLogin() {
+        user.setUsername(null);
+        user.setPassword(null);
+        user.setId(0);
+        user.setLoggedIn(false);
+        return "login" + "?faces-redirect=true";
+    }
 }

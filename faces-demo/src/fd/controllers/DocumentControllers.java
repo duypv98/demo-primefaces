@@ -28,175 +28,178 @@ import io.github.cdimascio.dotenv.Dotenv;
 @ManagedBean
 @ApplicationScoped
 public class DocumentControllers {
-	@ManagedProperty(value = "#{document}")
-	Document document;
-	@ManagedProperty(value = "#{user}")
-	User user;
-	static Dotenv dotenv = Dotenv.configure().directory("E:\\Git\\demo-primefaces\\faces-demo").ignoreIfMalformed()
-			.ignoreIfMissing().load();
-	static DocumentServices documentServices = new DocumentServices();
-	static String fileName;
-	static String altName;
-	static InputStream fileStream;
-	private String uploadedMessage = null;
-	private String documentType;
-	private Map<String, String> documentTypes = new HashMap<String, String>();
-	private StreamedContent originFile;
 
-	@PostConstruct
-	public void init() {
-		documentTypes = new HashMap<String, String>();
-		List<String> allTypes = new ArrayList<String>();
-		try {
-			allTypes = documentServices.getAllDocumentTypes();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		for (String type : allTypes) {
-			documentTypes.put(type, type);
-		}
-	}
+    @ManagedProperty(value = "#{document}")
+    Document document;
+    @ManagedProperty(value = "#{user}")
+    User user;
+    static Dotenv dotenv = Dotenv.configure().directory("E:\\Git\\demo-primefaces\\faces-demo").ignoreIfMalformed()
+            .ignoreIfMissing().load();
+    static DocumentServices documentServices = new DocumentServices();
+    static String fileName;
+    static String altName;
+    static InputStream fileStream;
+    private String uploadedMessage = null;
+    private String documentType;
+    private Map<String, String> documentTypes = new HashMap<String, String>();
+    private StreamedContent originFile;
 
-	public StreamedContent getOriginFile() {
-		return originFile;
-	}
+    @PostConstruct
+    public void init() {
+        documentTypes = new HashMap<String, String>();
+        List<String> allTypes = new ArrayList<String>();
+        try {
+            allTypes = documentServices.getAllDocumentTypes();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for (String type : allTypes) {
+            documentTypes.put(type, type);
+        }
+    }
 
-	public void setOriginFile(StreamedContent originFile) {
-		this.originFile = originFile;
-	}
+    public StreamedContent getOriginFile() {
+        return originFile;
+    }
 
-	public String getUploadedMessage() {
-		return uploadedMessage;
-	}
+    public void setOriginFile(StreamedContent originFile) {
+        this.originFile = originFile;
+    }
 
-	public void setUploadedMessage(String uploadedMessage) {
-		this.uploadedMessage = uploadedMessage;
-	}
+    public String getUploadedMessage() {
+        return uploadedMessage;
+    }
 
-	public String getDocumentType() {
-		return documentType;
-	}
+    public void setUploadedMessage(String uploadedMessage) {
+        this.uploadedMessage = uploadedMessage;
+    }
 
-	public void setDocumentType(String documentType) {
-		this.documentType = documentType;
-	}
+    public String getDocumentType() {
+        return documentType;
+    }
 
-	public Map<String, String> getDocumentTypes() {
-		return documentTypes;
-	}
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
+    }
 
-	public void setDocumentTypes(Map<String, String> documentTypes) {
-		this.documentTypes = documentTypes;
-	}
+    public Map<String, String> getDocumentTypes() {
+        return documentTypes;
+    }
 
-	public Document getDocument() {
-		return document;
-	}
+    public void setDocumentTypes(Map<String, String> documentTypes) {
+        this.documentTypes = documentTypes;
+    }
 
-	public void setDocument(Document document) {
-		this.document = document;
-	}
+    public Document getDocument() {
+        return document;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public void setDocument(Document document) {
+        this.document = document;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public void resetValue() {
-		document = new Document();
-		document.setName(null);
-		document.setType(null);
-		document.setFileName(null);
-		uploadedMessage = null;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	public void upload(FileUploadEvent event) throws IOException {
-		document = new Document();
-		document.setType(documentType);
-		document.setFileName(event.getFile().getFileName());
-		fileName = event.getFile().getFileName();
-		fileStream = event.getFile().getInputstream();
-		altName = fileName;
-		document.setName(altName);
-		uploadedMessage = fileName + " is uploaded";
-	}
+    public void resetValue() {
+        document = new Document();
+        document.setName(null);
+        document.setType(null);
+        document.setFileName(null);
+        uploadedMessage = null;
+    }
 
-	public void copyFile(String fileName, InputStream in) throws Exception {
-		Dotenv dotenv = Dotenv.configure().directory("E:\\Git\\demo-primefaces\\faces-demo").ignoreIfMalformed()
-				.ignoreIfMissing().load();
-		String destination = dotenv.get("UPLOAD_DIR");
-		int exFiles = documentServices.existedFiles(fileName.substring(0, fileName.lastIndexOf(".")));
-		if (exFiles > 0) {
-			fileName = fileName.substring(0, fileName.lastIndexOf(".")) + "_v" + exFiles + ".pdf";
-			altName = fileName;
-		}
-		try {
-			OutputStream out = new FileOutputStream(new File(destination + fileName));
+    public void upload(FileUploadEvent event) throws IOException {
+        document = new Document();
+        document.setType(documentType);
+        document.setFileName(event.getFile().getFileName());
+        fileName = event.getFile().getFileName();
+        fileStream = event.getFile().getInputstream();
+        altName = fileName;
+        document.setName(altName);
+        uploadedMessage = fileName + " is uploaded";
+    }
 
-			int read = 0;
-			byte[] bytes = new byte[1024];
+    public void copyFile(String fileName, InputStream in) throws Exception {
+        Dotenv dotenv = Dotenv.configure().directory("E:\\Git\\demo-primefaces\\faces-demo").ignoreIfMalformed()
+                .ignoreIfMissing().load();
+        String destination = dotenv.get("UPLOAD_DIR");
+        int exFiles = documentServices.existedFiles(fileName.substring(0, fileName.lastIndexOf(".")));
+        if (exFiles > 0) {
+            fileName = fileName.substring(0, fileName.lastIndexOf(".")) + "_v" + exFiles + ".pdf";
+            altName = fileName;
+        }
+        try {
+            OutputStream out = new FileOutputStream(new File(destination + fileName));
 
-			while ((read = in.read(bytes)) != -1) {
-				out.write(bytes, 0, read);
-			}
-			in.close();
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+            int read = 0;
+            byte[] bytes = new byte[1024];
 
-	public void submitUpload() throws Exception {
-		try {
-			copyFile(fileName, fileStream);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if (document.getName().isEmpty()) {
-			documentServices.uploadNewDocument(document.getFileName(), document.getType(), user.getId(), altName);
-		} else {
-			documentServices.uploadNewDocument(document.getName(), document.getType(), user.getId(), altName);
-		}
-		documentTypes.put(document.getType(), document.getType());
-		document.setName(null);
-		document.setFileName(null);
-		document.setType(null);
-		uploadedMessage = null;
-	}
+            while ((read = in.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+            in.close();
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void viewDocument(int id) throws Exception {
-		Document refDoc = documentServices.getDocumentByID(id);
-		document = new Document();
-		document.setId(refDoc.getId());
-		document.setName(refDoc.getName());
-		document.setFileName(refDoc.getFileName());
-		document.setType(refDoc.getType());
+    public void submitUpload() throws Exception {
+        try {
+            copyFile(fileName, fileStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (document.getName().isEmpty()) {
+            documentServices.uploadNewDocument(document.getFileName(), documentType, user.getId(), altName);
+        } else {
+            documentServices.uploadNewDocument(document.getName(), documentType, user.getId(), altName);
+        }
+        if (documentTypes.get(documentType) == null) {
+            documentTypes.put(documentType, documentType);
+        }
+        document.setName(null);
+        document.setFileName(null);
+        document.setType(null);
+        uploadedMessage = null;
+    }
 
-		String fileName = refDoc.getFileName();
-		String base = dotenv.get("ASSETS_DIR").trim();
-		File file = new File(base + fileName);
-		DefaultStreamedContent sc = new DefaultStreamedContent(new FileInputStream(file), "application/pdf",
-				fileName.substring(0, fileName.lastIndexOf(".")));
-		originFile = sc;
-	}
+    public void viewDocument(int id) throws Exception {
+        Document refDoc = documentServices.getDocumentByID(id);
+        document = new Document();
+        document.setId(refDoc.getId());
+        document.setName(refDoc.getName());
+        document.setFileName(refDoc.getFileName());
+        document.setType(refDoc.getType());
 
-	public void editDocument(int id) throws Exception {
-		Document refDoc = documentServices.getDocumentByID(id);
-		document = new Document();
-		document.setId(refDoc.getId());
-		document.setName(refDoc.getName());
-		document.setFileName(refDoc.getFileName());
-		document.setType(refDoc.getType());
-	}
+        String fileName = refDoc.getFileName();
+        String base = dotenv.get("ASSETS_DIR").trim();
+        File file = new File(base + fileName);
+        DefaultStreamedContent sc = new DefaultStreamedContent(new FileInputStream(file), "application/pdf",
+                fileName.substring(0, fileName.lastIndexOf(".")));
+        originFile = sc;
+    }
 
-	public void submitEdit() throws Exception {
-		documentServices.updateDocumentByID(document.getId(), document.getName(), document.getType());
-		document.setId(0);
-		document.setName(null);
-		document.setType(null);
-	}
+    public void editDocument(int id) throws Exception {
+        Document refDoc = documentServices.getDocumentByID(id);
+        document = new Document();
+        document.setId(refDoc.getId());
+        document.setName(refDoc.getName());
+        document.setFileName(refDoc.getFileName());
+        document.setType(refDoc.getType());
+    }
+
+    public void submitEdit() throws Exception {
+        documentServices.updateDocumentByID(document.getId(), document.getName(), documentType);
+        document.setId(0);
+        document.setName(null);
+        document.setType(null);
+    }
 }

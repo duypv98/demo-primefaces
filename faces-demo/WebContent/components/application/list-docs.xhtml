@@ -17,7 +17,7 @@
 		<h:form>
 			<p:commandButton value="Upload" icon="fa fa-upload"
 				action="#{documentControllers.resetValue()}"
-				update="@widgetVar('uploadDlg')"
+				update="@widgetVar(uploadDlg)"
 				oncomplete="PF('uploadDlg').show();" />
 		</h:form>
 	</h:panelGroup>
@@ -30,7 +30,7 @@
 				<h:outputText styleClass="alert-text"
 					value="Login to manage your document " />
 				<br />
-				<p:commandLink value="Login here" action="#{navigator.login()}"
+                                <p:commandLink value="Login here" action="#{userControllers.getToLogin()}"
 					style="color: green;" />
 			</h:panelGroup>
 		</h:panelGrid>

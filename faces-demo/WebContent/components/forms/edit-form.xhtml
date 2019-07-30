@@ -14,7 +14,7 @@
 
 			<p:outputLabel for="@next" value="Type" />
 			<p:selectOneMenu id="docType" effect="fold" editable="true"
-				value="#{documentControllers.document.type}" required="true">
+                                         value="#{documentControllers.documentType}" required="true">
 				<f:selectItem itemLabel="#{documentControllers.document.type}"
 					itemValue="#{documentControllers.document.type}" />
 				<f:selectItems value="#{documentControllers.documentTypes}" />
@@ -22,7 +22,7 @@
 		</h:panelGrid>
 		<p:commandButton value="Save" icon="fa fa-save"
 			action="#{documentViewControllers.editDocument()}"
-			update="list:documentList" oncomplete="PF('editDlg').hide();" />
+			update="list:documentList, form-search:search-type" oncomplete="PF('editDlg').hide();" />
 		<p:commandButton value="Cancel" icon="fa fa-times"
 			action="#{documentControllers.resetValue()}"
 			oncomplete="PF('editDlg').hide();" />
