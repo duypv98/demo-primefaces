@@ -4,8 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
 	<div class="search-bar">
 		<h:form id="form-search">
@@ -34,7 +33,7 @@
 				<p:commandButton icon="fa fa-search"
 					action="#{documentViewControllers.getDocumentsBySearch()}"
 					process="@this form-search"
-					update="list:documentList content-title" />
+					update="list:documentList content-title, nav-bar:home-btn" />
 			</h:panelGrid>
 		</h:form>
 	</div>

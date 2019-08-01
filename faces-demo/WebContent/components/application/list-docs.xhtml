@@ -1,116 +1,111 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
-<ui:composition>
-	<h:panelGroup layout="block">
-		<h:outputText style="font-weight: bold; font-size: xx-large"
-			id="content-title" value="#{documentViewControllers.contentTitle}" />
-	</h:panelGroup>
-	<h:panelGroup layout="block"
-		style="display: inline-block; display: flex; flex-direction: row-reverse;"
-		rendered="#{user.loggedIn}">
-		<h:form>
-			<p:commandButton value="Upload" icon="fa fa-upload"
-				action="#{documentControllers.resetValue()}"
-				update="@widgetVar(uploadDlg)"
-				oncomplete="PF('uploadDlg').show();" />
-		</h:form>
-	</h:panelGroup>
-	<h:form>
-		<h:panelGrid columns="3" cellpadding="4">
-			<p:commandButton icon="fa fa-home"
-				action="#{documentViewControllers.showAllDocuments()}"
-				update="list:documentList, content-title, form-search:search-name, form-search:search-type, form-search:search-date-from, form-search:search-date-to" />
-			<h:panelGroup layout="block" rendered="#{!user.loggedIn}">
-				<h:outputText styleClass="alert-text"
-					value="Login to manage your document " />
-				<br />
-                                <p:commandLink value="Login here" action="#{userControllers.getToLogin()}"
-					style="color: green;" />
-			</h:panelGroup>
-		</h:panelGrid>
-	</h:form>
-	<ui:insert name="search">
-		<ui:include src="/components/application/search-bar.xhtml" />
-	</ui:insert>
-	<h:form id="list">
-		<p:dataTable id="documentList"
-			value="#{documentViewControllers.allDocuments}" var="doc" border="2">
-			<p:column style="width: 5%;">
-				<f:facet name="header">ID</f:facet>
-			#{doc.id}
-		</p:column>
-			<p:column>
-				<f:facet name="header">Name</f:facet>
-			#{doc.name}
-		</p:column>
-			<p:column style="width: 15%;">
-				<f:facet name="header">Type</f:facet>
-			#{doc.type}
-		</p:column>
-			<p:column style="width: 15%;">
-				<f:facet name="header">Author</f:facet>
-			#{userControllers.getUsernameById(doc.userID)}
-		</p:column>
-			<p:column style="width: 12%;">
-				<f:facet name="header">Date Created</f:facet>
-			#{doc.dateCreated}
-		</p:column>
-			<p:column>
-				<f:facet name="header" colspan="3">Action</f:facet>
-				<p:commandButton value="View" icon="fa fa-eye" update="viewDlg"
-					action="#{documentControllers.viewDocument(doc.id)}"
-					oncomplete="PF('viewDlg').show();" />
-				<p:commandButton update="documentList, editDlg" value="Edit"
-					icon="fa fa-edit" rendered="#{documentViewControllers.userOp(doc)}"
-					action="#{documentControllers.editDocument(doc.id)}"
-					oncomplete="PF('editDlg').show();" />
-				<p:commandButton update="documentList" value="Delete"
-					icon="fa fa-close"
-					action="#{documentViewControllers.removeDocument(doc.id)}"
-					rendered="#{documentViewControllers.userOp(doc)}">
-					<p:confirm header="Confirm delete" message="Are you sure ?"
-						icon="fa fa-warning" />
-				</p:commandButton>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition>
+        <h:panelGroup layout="block">
+            <h:outputText style="font-weight: bold; font-size: xx-large"
+                          id="content-title" value="#{documentViewControllers.contentTitle}" />
+        </h:panelGroup>
+        <h:panelGroup layout="block"
+                      style="display: inline-block; display: flex; flex-direction: row-reverse;"
+                      rendered="#{user.loggedIn}">
+            <h:form>
+                <p:commandButton value="Upload" icon="fa fa-upload"
+                                 action="#{documentControllers.resetValue()}"
+                                 update="@widgetVar(uploadDlg)"
+                                 oncomplete="PF('uploadDlg').show();" />
+            </h:form>
+        </h:panelGroup>
+        <h:form id="nav-bar">
+            <h:panelGrid columns="3" cellpadding="4">
+                <p:commandButton id="home-btn" icon="fa fa-home" value="#{documentViewControllers.homeButtonValue}"
+                                 action="#{documentViewControllers.showAllDocuments()}"
+                                 update="@this, list:documentList, content-title, form-search:search-name, form-search:search-type, form-search:search-date-from, form-search:search-date-to" />
+                <h:panelGroup layout="block" rendered="#{!user.loggedIn}">
+                    <h:outputText styleClass="alert-text"
+                                  value="Login to manage your document " />
+                    <br />
+                    <p:commandLink value="Login here" action="#{userControllers.getToLogin()}"
+                                   style="color: green;" />
+                </h:panelGroup>
+            </h:panelGrid>
+        </h:form>
+        <ui:insert name="search">
+            <ui:include src="/components/application/search-bar.xhtml" />
+        </ui:insert>
+        <h:form id="list">
+            <p:dataTable id="documentList"
+                         value="#{documentViewControllers.allDocuments}" var="doc">
+                <p:column style="width: 5%;">
+                    <f:facet name="header">ID</f:facet>
+                        #{doc.id}
+                </p:column>
+                <p:column>
+                    <f:facet name="header">Name</f:facet>
+                        #{doc.name}
+                </p:column>
+                <p:column style="width: 15%;">
+                    <f:facet name="header">Type</f:facet>
+                        #{doc.type}
+                </p:column>
+                <p:column style="width: 15%;">
+                    <f:facet name="header">Author</f:facet>
+                        #{userControllers.getUsernameById(doc.userID)}
+                </p:column>
+                <p:column style="width: 12%;">
+                    <f:facet name="header">Date Created</f:facet>
+                        #{doc.dateCreated}
+                </p:column>
+                <p:column>
+                    <f:facet name="header">Action</f:facet>
+                    <p:commandButton value="View" icon="fa fa-eye" update="documentList, viewDlg"
+                                     action="#{documentControllers.viewDocument(doc.id)}" oncomplete="PF('viewDlg').show();"/>
+                    <p:commandButton update="documentList, editDlg" value="Edit"
+                                     icon="fa fa-edit" rendered="#{documentViewControllers.userOp(doc)}"
+                                     action="#{documentControllers.editDocument(doc.id)}"
+                                     oncomplete="PF('editDlg').show();" />
+                    <p:commandButton update="documentList" value="Delete"
+                                     icon="fa fa-close"
+                                     action="#{documentViewControllers.removeDocument(doc.id)}"
+                                     rendered="#{documentViewControllers.userOp(doc)}">
+                        <p:confirm header="Confirm delete" message="Are you sure ?"
+                                   icon="fa fa-warning" />
+                    </p:commandButton>
 
-				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
-					closeOnEscape="true">
-					<p:commandButton value="Yes" type="button"
-						styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
-					<p:commandButton value="No" type="button"
-						styleClass="ui-confirmdialog-no" icon="fa fa-times" />
-				</p:confirmDialog>
-			</p:column>
-		</p:dataTable>
-	</h:form>
-	<!-- Dialog -->
-	<p:dialog id="viewDlg" showEffect="fade" hideEffect="fade"
-		header="#{documentControllers.document.name}" widgetVar="viewDlg"
-		fitViewport="true" resizable="false" closeOnEscape="true" width="100%"
-		height="100%" draggable="false">
-		<ui:insert name="view">
-			<ui:include src="/components/application/document-view.xhtml" />
-		</ui:insert>
-	</p:dialog>
-	<p:dialog id="editDlg" showEffect="fade" hideEffect="fade"
-		header="Edit: #{documentControllers.document.name}"
-		widgetVar="editDlg" fitViewport="true" resizable="false" width="800"
-		closable="false">
-		<ui:insert name="edit-form">
-			<ui:include src="/components/forms/edit-form.xhtml" />
-		</ui:insert>
-	</p:dialog>
-	<p:dialog id="uploadDlg" showEffect="fade" hideEffect="fade"
-		header="Uploading new file..." widgetVar="uploadDlg"
-		fitViewport="true" resizable="false" width="800" closable="false">
-		<ui:insert name="upload-form">
-			<ui:include src="/components/forms/upload-form.xhtml" />
-		</ui:insert>
-	</p:dialog>
-</ui:composition>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+                                     closeOnEscape="true">
+                        <p:commandButton value="Yes" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                        <p:commandButton value="No" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="fa fa-times" />
+                    </p:confirmDialog>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <!-- Dialog -->
+        <p:dialog id="viewDlg" showEffect="slide" hideEffect="slide" header="#{documentControllers.document.name}" 
+                  widgetVar="viewDlg" width="100vw" height="100vh" closeOnEscape="true">
+            <ui:insert name="view-panel">
+                <ui:include src="/components/application/document-view.xhtml" />
+            </ui:insert>
+        </p:dialog>
+        <p:dialog id="editDlg" showEffect="fade" hideEffect="fade"
+                  header="Edit: #{documentControllers.document.name}" widgetVar="editDlg"
+                  fitViewport="true" resizable="false" width="800" closable="true" closeOnEscape="true">
+            <ui:insert name="edit-form">
+                <ui:include src="/components/forms/edit-form.xhtml" />
+            </ui:insert>
+        </p:dialog>
+        <p:dialog id="uploadDlg" showEffect="fade" hideEffect="fade"
+                  header="Uploading new file..." widgetVar="uploadDlg"
+                  fitViewport="true" resizable="false" width="800" closable="false">
+            <ui:insert name="upload-form">
+                <ui:include src="/components/forms/upload-form.xhtml" />
+            </ui:insert>
+        </p:dialog>
+    </ui:composition>
 </html>

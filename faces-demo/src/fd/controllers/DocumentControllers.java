@@ -1,7 +1,6 @@
 package fd.controllers;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,13 +16,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 
 import fd.models.Document;
 import fd.models.User;
 import fd.services.DocumentServices;
 import io.github.cdimascio.dotenv.Dotenv;
+import java.io.FileInputStream;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 @ManagedBean
 @ApplicationScoped
@@ -41,29 +41,21 @@ public class DocumentControllers {
     static InputStream fileStream;
     private String uploadedMessage = null;
     private String documentType;
-    private Map<String, String> documentTypes = new HashMap<String, String>();
+    private Map<String, String> documentTypes = new HashMap<>();
     private StreamedContent originFile;
 
     @PostConstruct
     public void init() {
-        documentTypes = new HashMap<String, String>();
-        List<String> allTypes = new ArrayList<String>();
+        documentTypes = new HashMap<>();
+        List<String> allTypes = new ArrayList<>();
         try {
             allTypes = documentServices.getAllDocumentTypes();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         for (String type : allTypes) {
             documentTypes.put(type, type);
         }
-    }
-
-    public StreamedContent getOriginFile() {
-        return originFile;
-    }
-
-    public void setOriginFile(StreamedContent originFile) {
-        this.originFile = originFile;
     }
 
     public String getUploadedMessage() {
@@ -106,6 +98,14 @@ public class DocumentControllers {
         this.user = user;
     }
 
+    public StreamedContent getOriginFile() {
+        return originFile;
+    }
+
+    public void setOriginFile(StreamedContent originFile) {
+        this.originFile = originFile;
+    }
+
     public void resetValue() {
         document = new Document();
         document.setName(null);
@@ -125,9 +125,8 @@ public class DocumentControllers {
         uploadedMessage = fileName + " is uploaded";
     }
 
+    @SuppressWarnings("ConvertToTryWithResources")
     public void copyFile(String fileName, InputStream in) throws Exception {
-        Dotenv dotenv = Dotenv.configure().directory("E:\\Git\\demo-primefaces\\faces-demo").ignoreIfMalformed()
-                .ignoreIfMissing().load();
         String destination = dotenv.get("UPLOAD_DIR");
         int exFiles = documentServices.existedFiles(fileName.substring(0, fileName.lastIndexOf(".")));
         if (exFiles > 0) {
@@ -137,6 +136,7 @@ public class DocumentControllers {
         try {
             OutputStream out = new FileOutputStream(new File(destination + fileName));
 
+            @SuppressWarnings("UnusedAssignment")
             int read = 0;
             byte[] bytes = new byte[1024];
 
@@ -147,7 +147,7 @@ public class DocumentControllers {
             out.flush();
             out.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
     }
 
@@ -155,7 +155,7 @@ public class DocumentControllers {
         try {
             copyFile(fileName, fileStream);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         if (document.getName().isEmpty()) {
             documentServices.uploadNewDocument(document.getFileName(), documentType, user.getId(), altName);
@@ -169,22 +169,6 @@ public class DocumentControllers {
         document.setFileName(null);
         document.setType(null);
         uploadedMessage = null;
-    }
-
-    public void viewDocument(int id) throws Exception {
-        Document refDoc = documentServices.getDocumentByID(id);
-        document = new Document();
-        document.setId(refDoc.getId());
-        document.setName(refDoc.getName());
-        document.setFileName(refDoc.getFileName());
-        document.setType(refDoc.getType());
-
-        String fileName = refDoc.getFileName();
-        String base = dotenv.get("ASSETS_DIR").trim();
-        File file = new File(base + fileName);
-        DefaultStreamedContent sc = new DefaultStreamedContent(new FileInputStream(file), "application/pdf",
-                fileName.substring(0, fileName.lastIndexOf(".")));
-        originFile = sc;
     }
 
     public void editDocument(int id) throws Exception {
@@ -201,5 +185,19 @@ public class DocumentControllers {
         document.setId(0);
         document.setName(null);
         document.setType(null);
+    }
+
+    public void viewDocument(int id) throws Exception {
+
+        Document refDoc = documentServices.getDocumentByID(id);
+        String originFileName = refDoc.getFileName();
+        @SuppressWarnings("null")
+        String base = dotenv.get("ASSETS_DIR").trim();
+        File file = new File(base + originFileName);
+        DefaultStreamedContent sc = new DefaultStreamedContent(new FileInputStream(file), "application/pdf",
+                originFileName.substring(0, originFileName.lastIndexOf(".")));
+        originFile = sc;
+        document = new Document();
+        document.setName(refDoc.getName());
     }
 }
