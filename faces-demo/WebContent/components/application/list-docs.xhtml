@@ -40,23 +40,23 @@
         <h:form id="list">
             <p:dataTable id="documentList"
                          value="#{documentViewControllers.allDocuments}" var="doc">
-                <p:column style="width: 5%;">
-                    <f:facet name="header">ID</f:facet>
-                        #{doc.id}
-                </p:column>
-                <p:column>
+                <!--                <p:column style="width: 5%;">
+                                    <f:facet name="header">ID</f:facet>
+                #{doc.id}
+        </p:column>-->
+                <p:column sortBy="#{doc.name}">
                     <f:facet name="header">Name</f:facet>
                         #{doc.name}
                 </p:column>
-                <p:column style="width: 15%;">
+                <p:column sortBy="#{doc.type}" style="width: 15%;">
                     <f:facet name="header">Type</f:facet>
                         #{doc.type}
                 </p:column>
-                <p:column style="width: 15%;">
+                <p:column sortBy="#{userControllers.getUsernameById(doc.userID)}" style="width: 15%;">
                     <f:facet name="header">Author</f:facet>
                         #{userControllers.getUsernameById(doc.userID)}
                 </p:column>
-                <p:column style="width: 12%;">
+                <p:column sortBy="#{doc.dateCreated}" style="width: 12%;">
                     <f:facet name="header">Date Created</f:facet>
                         #{doc.dateCreated}
                 </p:column>
